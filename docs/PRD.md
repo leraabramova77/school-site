@@ -45,7 +45,7 @@
 | 0002 CI: gitleaks, `pnpm audit`, проверка `NEXT_PUBLIC_*`, pre-commit с gitleaks, Dependabot, каркас Playwright | Защита от утечек (ТЗ-1 §4.4, §4.7) | Claude | ✅ |
 | 0003 Разведка API netschool.refal.kg через браузер, `docs/api-map.md` на выдуманных данных | Точная карта API (ТЗ-1, этап 0) | Claude + Лера (вход) | ✅ |
 | 0004 `pnpm wt remove` на Windows, обновления GitHub Actions и react | Уборка worktree без хвостов, CI без устаревшего Node 20 | Claude | ✅ |
-| 0005 Дизайн-токены OKLCH, шрифт, светлая/тёмная тема, safe-area | Дизайн-система (ТЗ-1 §5.2) | Claude | ⏳ |
+| 0005 Дизайн-токены OKLCH, шрифт, светлая/тёмная тема, safe-area | Дизайн-система (ТЗ-1 §5.2) | Claude | в работе |
 | 0006 shadcn/ui в `shared/ui`: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
 | 0007 GradeChip, LessonCard, DayStrip | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
 | 0008 TabBar / Sidebar, страница `/design` | Утверждение вида (ТЗ-1 §5.6) | Claude | ⏳ |

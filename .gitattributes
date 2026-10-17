@@ -1,0 +1,2 @@
+# LF везде: bash-хук scripts/hooks/pre-push с CRLF не запустится.
+* text=auto eol=lf

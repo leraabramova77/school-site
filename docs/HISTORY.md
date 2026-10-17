@@ -8,3 +8,4 @@
 |---|---|---|---|---|---|
 | 0001 | chore | Каркас проекта и AI-конвейер | — | — (начальный коммит) | ✅ |
 | 0002 | chore | CI: gitleaks, audit, NEXT_PUBLIC, Dependabot, Playwright | — | #1 | ✅ |
+| 0003 | chore | Разведка API netschool.refal.kg, docs/api-map.md | — | — | в работе |

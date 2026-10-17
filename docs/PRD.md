@@ -40,7 +40,7 @@
 | Что | Зачем | Ведёт | Статус |
 |---|---|---|---|
 | 0001 Каркас: Next.js 16, FSD, Biome, Steiger, Vitest, AI-конвейер, репозиторий на GitHub | Основа проекта (ТЗ-1, этап 1) | Claude | ✅ |
-| 0002 CI: gitleaks, `pnpm audit`, проверка `NEXT_PUBLIC_*`, pre-commit с gitleaks, Dependabot, каркас Playwright | Защита от утечек (ТЗ-1 §4.4, §4.7) | Claude | в работе |
+| 0002 CI: gitleaks, `pnpm audit`, проверка `NEXT_PUBLIC_*`, pre-commit с gitleaks, Dependabot, каркас Playwright | Защита от утечек (ТЗ-1 §4.4, §4.7) | Claude | ✅ |
 | 0003 Разведка API netschool.refal.kg через браузер, `docs/api-map.md` на выдуманных данных | Точная карта API (ТЗ-1, этап 0) | Claude + Лера (вход) | ⏳ |
 | 0004 Дизайн-токены OKLCH, шрифт, светлая/тёмная тема, safe-area | Дизайн-система (ТЗ-1 §5.2) | Claude | ⏳ |
 | 0005 shadcn/ui в `shared/ui`: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
@@ -69,3 +69,4 @@
 | Дата | Этап / задача | Коммит |
 |---|---|---|
 | 18.10.2026 | 0001 Каркас, публичный репозиторий, защита main (ruleset: PR + зелёный CI), Secret Scanning, Push Protection, Dependabot | dda37b1 |
+| 18.10.2026 | 0002 CI: gitleaks, audit, NEXT_PUBLIC, поиск секретов в бандле, Dependabot, Playwright | см. git log (PR #1) |

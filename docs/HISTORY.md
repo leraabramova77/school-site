@@ -7,4 +7,4 @@
 | Номер | Тип | Задача | Spec | PR | Статус |
 |---|---|---|---|---|---|
 | 0001 | chore | Каркас проекта и AI-конвейер | — | — (начальный коммит) | ✅ |
-| 0002 | chore | CI: gitleaks, audit, NEXT_PUBLIC, Dependabot, Playwright | — | — | в работе |
+| 0002 | chore | CI: gitleaks, audit, NEXT_PUBLIC, Dependabot, Playwright | — | #1 | ✅ |

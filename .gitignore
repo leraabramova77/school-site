@@ -56,3 +56,6 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+
+# снимки и логи Playwright MCP — могут содержать личные данные со страниц дневника
+/.playwright-mcp/

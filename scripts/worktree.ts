@@ -496,7 +496,17 @@ function removeWorktree(
   main: string,
   opts: { force: boolean; merged: boolean },
 ) {
-  if (fs.existsSync(w.path)) stop(w.path, true);
+  if (fs.existsSync(w.path)) {
+    stop(w.path, true);
+    // На Windows `git worktree remove` спотыкается о node_modules pnpm (симлинки, длинные пути) и бросает
+    // удаление на полпути. Игнорируемые тяжёлые папки удаляем сами: rmSync снимает ссылки, не заходя в цель.
+    for (const dir of ["node_modules", ".next"])
+      fs.rmSync(path.join(w.path, dir), {
+        recursive: true,
+        force: true,
+        maxRetries: 3,
+      });
+  }
   git(["worktree", "remove", ...(opts.force ? ["--force"] : []), w.path], main);
   if (w.branch && (opts.merged || opts.force))
     tryGit(["branch", "-D", w.branch], main);

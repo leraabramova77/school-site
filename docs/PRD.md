@@ -44,7 +44,7 @@
 | 0001 Каркас: Next.js 16, FSD, Biome, Steiger, Vitest, AI-конвейер, репозиторий на GitHub | Основа проекта (ТЗ-1, этап 1) | Claude | ✅ |
 | 0002 CI: gitleaks, `pnpm audit`, проверка `NEXT_PUBLIC_*`, pre-commit с gitleaks, Dependabot, каркас Playwright | Защита от утечек (ТЗ-1 §4.4, §4.7) | Claude | ✅ |
 | 0003 Разведка API netschool.refal.kg через браузер, `docs/api-map.md` на выдуманных данных | Точная карта API (ТЗ-1, этап 0) | Claude + Лера (вход) | ✅ |
-| 0004 `pnpm wt remove` на Windows, обновления GitHub Actions и react | Уборка worktree без хвостов, CI без устаревшего Node 20 | Claude | в работе |
+| 0004 `pnpm wt remove` на Windows, обновления GitHub Actions и react | Уборка worktree без хвостов, CI без устаревшего Node 20 | Claude | ✅ |
 | 0005 Дизайн-токены OKLCH, шрифт, светлая/тёмная тема, safe-area | Дизайн-система (ТЗ-1 §5.2) | Claude | ⏳ |
 | 0006 shadcn/ui в `shared/ui`: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
 | 0007 GradeChip, LessonCard, DayStrip | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
@@ -74,3 +74,4 @@
 | 18.10.2026 | 0001 Каркас, публичный репозиторий, защита main (ruleset: PR + зелёный CI), Secret Scanning, Push Protection, Dependabot | dda37b1 |
 | 18.10.2026 | 0002 CI: gitleaks, audit, NEXT_PUBLIC, поиск секретов в бандле, Dependabot, Playwright | см. git log (PR #1) |
 | 18.10.2026 | 0003 Разведка API: REST выключен, вход и данные через ASP-формы и HTML, карта в docs/api-map.md | см. git log |
+| 18.10.2026 | 0004 `pnpm wt remove` на Windows без хвостов, обновления Actions, react 19.3.1 | PR #10 |

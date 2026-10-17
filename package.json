@@ -12,9 +12,11 @@
     "format": "biome format --write",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "check": "pnpm lint && pnpm lint:fsd && pnpm typecheck && pnpm test",
+    "check": "pnpm lint && pnpm lint:env && pnpm lint:fsd && pnpm typecheck && pnpm test",
     "wt": "tsx scripts/worktree.ts",
-    "hooks:install": "git config core.hooksPath scripts/hooks"
+    "hooks:install": "git config core.hooksPath scripts/hooks",
+    "lint:env": "tsx scripts/check-public-env.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "next": "16.4.2",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "@feature-sliced/steiger-plugin": "^0.8.0",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

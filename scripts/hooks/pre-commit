@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Блокирует коммит, если в индексе есть секреты (ТЗ-1 §4.4). Тот же gitleaks работает в CI.
+# Установка: `pnpm hooks:install`. gitleaks: https://github.com/gitleaks/gitleaks/releases (положить в PATH).
+set -euo pipefail
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "✖ gitleaks не найден в PATH — коммит без проверки секретов запрещён." >&2
+  echo "  Скачайте релиз с https://github.com/gitleaks/gitleaks/releases и положите gitleaks в PATH." >&2
+  exit 1
+fi
+
+gitleaks git --pre-commit --staged --redact --no-banner

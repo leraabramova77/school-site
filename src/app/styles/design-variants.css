@@ -1,0 +1,67 @@
+/*
+ * Варианты оформления A и C (основной — B, он в globals.css). Атрибут data-design на <html> ставит features/design-switch.
+ * Цвета перенесены из прототипов design-variants/ (их утверждали по скриншотам). Селекторы с :root/.dark — чтобы
+ * перебить базовые токены независимо от порядка подключения.
+ */
+
+/* A «Тетрадь»: бумага, синие чернила, красная линия полей, оценки красной ручкой. */
+:root[data-design="a"] {
+  --bg: #e9edf5;
+  --surface: #fbfcfe;
+  --surface-2: #e6ebf8;
+  --border: #dbe2ef;
+  --text: #18203a;
+  --text-muted: #5f6882;
+  --accent: #1f3a93;
+  --accent-fg: #ffffff;
+  --ink-red: #c9302f;
+  --font-body: var(--font-onest);
+  --font-heading: var(--font-onest);
+}
+
+.dark[data-design="a"] {
+  --bg: #0a0f1c;
+  --surface: #111a2e;
+  --surface-2: #1c2847;
+  --border: #233150;
+  --text: #e7ebf5;
+  --text-muted: #8e99b5;
+  --accent: #9db4ff;
+  --accent-fg: #0a0f1c;
+  --ink-red: #ff7a70;
+}
+
+/* C «Спокойный список»: системный iOS-стиль, сгруппированные списки, синий акцент. */
+:root[data-design="c"] {
+  --bg: #f2f2f6;
+  --surface: #ffffff;
+  --surface-2: #e4effb;
+  --border: #e2e2ea;
+  --text: #16161d;
+  --text-muted: #6b6b76;
+  --accent: #0b6bcb;
+  --accent-fg: #ffffff;
+  --grade-5: #1b8f4f;
+  --grade-4: #2470c9;
+  --grade-3: #a86e00;
+  --grade-2: #d33636;
+  --grade-debt: #8d4fc3;
+  --font-body: var(--font-golos);
+  --font-heading: var(--font-golos);
+}
+
+.dark[data-design="c"] {
+  --bg: #0b0b0f;
+  --surface: #1b1b21;
+  --surface-2: #19283b;
+  --border: #2c2c35;
+  --text: #f2f2f6;
+  --text-muted: #9a9aa6;
+  --accent: #5aa6ff;
+  --accent-fg: #0b0b0f;
+  --grade-5: #3cc47a;
+  --grade-4: #5aa6ff;
+  --grade-3: #e8a63a;
+  --grade-2: #ff6b66;
+  --grade-debt: #b685e8;
+}

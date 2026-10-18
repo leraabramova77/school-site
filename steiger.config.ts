@@ -9,4 +9,9 @@ export default defineConfig([
     files: ["./src/entities/**", "./src/widgets/**"],
     rules: { "fsd/insignificant-slice": "off" },
   },
+  {
+    // Переключатель вариантов подключён ещё и в корневом app/layout.tsx, а корневой app/ Steiger не видит.
+    files: ["./src/features/design-switch/**"],
+    rules: { "fsd/insignificant-slice": "off" },
+  },
 ]);

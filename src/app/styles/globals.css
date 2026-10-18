@@ -138,6 +138,12 @@
 }
 
 @layer base {
+  /* Страховка: что-то шире экрана (анимация, длинная строка) не даёт прокручивать страницу вбок. clip, а не hidden, — sticky и прокрутка по вертикали не ломаются. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     background-color: var(--bg);
     color: var(--text);

@@ -12,7 +12,7 @@ export function SafeHtml({ sanitizedHtml, className }: SafeHtmlProps) {
     <div
       data-slot="safe-html"
       className={cn(
-        "break-words [&_a]:text-accent [&_a]:underline [&_li]:ms-5 [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-disc",
+        "[overflow-wrap:anywhere] [&_a]:text-accent [&_a]:underline [&_li]:ms-5 [&_ol]:list-decimal [&_p+p]:mt-2 [&_ul]:list-disc",
         className,
       )}
       // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML уже прошёл allowlist-санитайзер на сервере.

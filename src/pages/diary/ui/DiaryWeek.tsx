@@ -122,7 +122,8 @@ function DiaryWeekContent({ today }: { today: IsoDate }) {
       <section
         aria-labelledby="diary-day-title"
         aria-busy={week.isPending}
-        className="flex flex-1 touch-pan-y flex-col gap-3"
+        // overflow-x-clip: карточка дня въезжает сбоку и не должна расширять страницу.
+        className="flex flex-1 touch-pan-y flex-col gap-3 overflow-x-clip"
         {...swipe}
       >
         <h3

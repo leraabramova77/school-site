@@ -20,6 +20,7 @@
     "netschool:watch": "tsx scripts/netschool-session-watch.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "5.9.1",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "iron-session": "9.0.1",
@@ -31,6 +32,7 @@
     "radix-ui": "1.8.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "react-hook-form": "7.89.0",
     "server-only": "0.0.1",
     "tailwind-merge": "3.7.0",
     "zod": "4.6.7"

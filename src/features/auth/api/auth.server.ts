@@ -1,5 +1,4 @@
 import "server-only";
-import { z } from "zod";
 import { createMemoryRateLimiter } from "@/shared/lib/rate-limit";
 import {
   loginToNetschool,
@@ -9,6 +8,7 @@ import {
 } from "@/shared/netschool";
 import { clientIp, isSameOrigin, logger, NO_STORE } from "@/shared/server";
 import { clearSession, readSession, writeSession } from "@/shared/session";
+import { type AuthResponse, loginSchema } from "../model/login-schema";
 
 /*
  * API входа и выхода (ТЗ-1 §4.1–4.4, этап 4). Пароль живёт только в памяти этого запроса: хеш → netschool → забыт.
@@ -18,13 +18,6 @@ import { clearSession, readSession, writeSession } from "@/shared/session";
 /** 5 попыток входа за 10 минут с одного IP (ТЗ-1 §4.4). */
 export const LOGIN_LIMIT = { limit: 5, windowMs: 10 * 60_000 };
 const loginLimiter = createMemoryRateLimiter(LOGIN_LIMIT);
-
-const loginSchema = z.object({
-  login: z.string().trim().min(1).max(100),
-  password: z.string().min(1).max(200),
-});
-
-export type AuthResponse = { ok: true } | { ok: false; error: string };
 
 function reply(body: AuthResponse, status = 200, headers?: HeadersInit) {
   return Response.json(body, {

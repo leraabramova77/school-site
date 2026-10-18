@@ -2,6 +2,7 @@ import "server-only";
 import { sealData, unsealData } from "iron-session";
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { sessionCookieName } from "@/shared/config";
 import { getServerEnv } from "@/shared/server";
 
 /*
@@ -28,15 +29,12 @@ export type SessionData = z.infer<typeof sessionSchema>;
  */
 export const SESSION_TTL_SECONDS = 24 * 60 * 60;
 
-/**
- * `__Host-` требует Secure, а браузер не сохранит Secure-cookie, пришедшую по http с адреса в локальной сети.
- * Поэтому префикс и Secure — только в проде (там всегда https).
- */
+/** Имя и флаги cookie сессии; `__Host-` и Secure — только в проде (см. `sessionCookieName`). */
 export function sessionCookie(
   production = process.env.NODE_ENV === "production",
 ) {
   return {
-    name: production ? "__Host-session" : "session",
+    name: sessionCookieName(production),
     options: {
       httpOnly: true,
       secure: production,

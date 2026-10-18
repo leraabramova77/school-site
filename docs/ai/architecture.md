@@ -6,7 +6,7 @@
 - Импорт только вниз; слайсы одного слоя друг друга не импортируют.
 - Наружу слайс отдаёт только `index.ts`; сегменты — `ui`, `model`, `api`, `lib`, `config`.
 - Next.js `app/` в корне (роутинг) тонкий: реэкспортирует страницы из `src/pages`. Поскольку корневой `app/` есть, Next игнорирует `src/app` и `src/pages` — это слои FSD, а не роуты.
-- Серверный код (запросы к netschool, сессия, env, логгер) — файлы `*.server.ts` с `import "server-only"` в сегментах `api`/`lib`/`config`.
+- Серверный код (запросы к netschool, сессия, env, логгер) — файлы `*.server.ts` с `import "server-only"` в сегментах `api`/`lib`/`config`. Общее серверное — `@/shared/server`: `getServerEnv()` (Zod, «not-required»/«required-not-set» = не задано) и `logger` с белым списком полей. `console.*` на сервере — только через `logger`.
 - Проверка границ — `pnpm lint:fsd` (Steiger).
 
 ## Данные

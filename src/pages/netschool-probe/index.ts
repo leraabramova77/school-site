@@ -1,3 +1,3 @@
-// Отладочная страница netschool — только для `pnpm dev`. probeHandler — серверный, импортировать только из route.
-export { probeHandler } from "./api/probe.server";
+// Отладочная страница netschool — только для `pnpm dev`. Обработчики — серверные, импортировать только из route.
+export { probeLogin, probeLogout, probeResume } from "./api/probe.server";
 export { ProbePage } from "./ui/ProbePage";

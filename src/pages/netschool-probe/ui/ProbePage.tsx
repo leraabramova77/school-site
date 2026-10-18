@@ -1,12 +1,24 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import type { DiaryWeek } from "@/shared/netschool";
-import { Button, Card, Input, PasswordInput } from "@/shared/ui";
+import { Button, Card, Input, PasswordInput, Skeleton } from "@/shared/ui";
 
 type ProbeResult =
-  | { ok: true; durationMs: number; cookieNames: string[]; week: DiaryWeek }
+  | {
+      ok: true;
+      durationMs: number;
+      cookieNames: string[];
+      sessionAgeMin: number;
+      week: DiaryWeek;
+    }
   | { ok?: false; error: string; code?: string };
+
+type ResumeResult =
+  | ProbeResult
+  | { ok?: false; needLogin: true; expiredAfterIdleMin?: number };
+
+const API = "/api/dev/netschool-probe";
 
 /** Credential Management API есть в Chrome/Edge, но не в типах TypeScript. */
 type PasswordCredentialCtor = new (form: HTMLFormElement) => Credential;
@@ -29,7 +41,34 @@ async function offerToSavePassword(form: HTMLFormElement): Promise<void> {
 /** Отладочная страница: вход в netschool и разбор текущей недели. Только в `pnpm dev`. */
 export function ProbePage() {
   const [pending, setPending] = useState(false);
+  const [resuming, setResuming] = useState(true);
+  const [expiredNote, setExpiredNote] = useState<string | null>(null);
   const [result, setResult] = useState<ProbeResult | null>(null);
+
+  // При открытии — пробуем сохранённую сессию: если она жива, вход не нужен.
+  useEffect(() => {
+    fetch(API)
+      .then((res) => res.json() as Promise<ResumeResult>)
+      .then((data) => {
+        if ("needLogin" in data) {
+          if (data.expiredAfterIdleMin !== undefined) {
+            setExpiredNote(
+              `Сессия netschool закончилась после ${data.expiredAfterIdleMin} мин без запросов — войди заново.`,
+            );
+          }
+        } else {
+          setResult(data);
+        }
+      })
+      .catch(() => setResult({ error: "Наш сервер не ответил" }))
+      .finally(() => setResuming(false));
+  }, []);
+
+  async function logout() {
+    await fetch(API, { method: "DELETE" }).catch(() => undefined);
+    setResult(null);
+    setExpiredNote(null);
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -38,7 +77,7 @@ export function ProbePage() {
     setPending(true);
     setResult(null);
     try {
-      const res = await fetch("/api/dev/netschool-probe", {
+      const res = await fetch(API, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
@@ -62,13 +101,22 @@ export function ProbePage() {
         <h1 className="font-bold text-title-1">Проверка netschool</h1>
         <p className="text-footnote text-muted-foreground">
           Только для разработки. Логин и пароль уходят в netschool через наш
-          локальный сервер и нигде не сохраняются.
+          локальный сервер и нигде не сохраняются. Сессия netschool хранится в
+          зашифрованной httpOnly-cookie.
         </p>
       </div>
 
-      {result?.ok ? (
-        <Button variant="secondary" onClick={() => setResult(null)}>
-          Войти заново
+      {expiredNote && (
+        <Card className="p-4 text-body" role="status">
+          {expiredNote}
+        </Card>
+      )}
+
+      {resuming ? (
+        <Skeleton className="h-48 rounded-card" />
+      ) : result?.ok ? (
+        <Button variant="secondary" onClick={logout}>
+          Выйти
         </Button>
       ) : (
         <Card className="p-4">
@@ -114,8 +162,8 @@ export function ProbePage() {
       {result?.ok && (
         <Card className="flex flex-col gap-3 p-4">
           <p className="text-subhead">
-            Вход и загрузка: {result.durationMs} мс · cookie:{" "}
-            {result.cookieNames.join(", ") || "нет"} · неделя:{" "}
+            Загрузка: {result.durationMs} мс · сессии {result.sessionAgeMin} мин
+            · cookie: {result.cookieNames.join(", ") || "нет"} · неделя:{" "}
             {result.week.selectedWeek ?? "?"} · недель в списке:{" "}
             {result.week.weeks.length} · PCLID:{" "}
             {result.week.pclid ? "есть" : "нет"}

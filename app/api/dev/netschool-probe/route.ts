@@ -1,3 +1,5 @@
-import { probeHandler } from "@/pages/netschool-probe";
+import { probeLogin, probeLogout, probeResume } from "@/pages/netschool-probe";
 
-export const POST = probeHandler;
+export const GET = probeResume;
+export const POST = probeLogin;
+export const DELETE = probeLogout;

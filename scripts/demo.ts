@@ -104,10 +104,12 @@ function prepareBuild() {
   rmSync(DEMO_DIR, { recursive: true, force: true });
   mkdirSync(DEMO_DIR, { recursive: true });
   execFileSync("git", ["fetch", "-q", "origin", "main"], { cwd: ROOT });
-  const archive = path.join(os.tmpdir(), "school-site-demo.tar");
-  execFileSync("git", ["archive", "-o", archive, "origin/main"], { cwd: ROOT });
-  execFileSync("tar", ["-xf", archive, "-C", DEMO_DIR]);
-  rmSync(archive, { force: true });
+  // Архив — через поток: tar из Git Bash принимает «C:» в пути за адрес удалённого хоста.
+  const archive = execFileSync("git", ["archive", "origin/main"], {
+    cwd: ROOT,
+    maxBuffer: 512 * 1024 * 1024,
+  });
+  execFileSync("tar", ["-xf", "-"], { cwd: DEMO_DIR, input: archive });
   writeFileSync(
     ENV_FILE,
     env ?? `SESSION_SECRET=${randomBytes(48).toString("base64url")}\n`,

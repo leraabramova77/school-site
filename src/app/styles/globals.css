@@ -10,6 +10,10 @@
 :root {
   color-scheme: light;
 
+  /* Шрифты варианта: текст и крупные цифры. Варианты A и C подменяют их в design-variants.css. */
+  --font-body: var(--font-manrope);
+  --font-heading: var(--font-unbounded);
+
   /* Вариант B «Цвет предмета»: светлый холодно-серый фон, белые карточки, почти чёрные акценты. */
   --bg: oklch(0.965 0.006 275);
   --surface: oklch(1 0 0);
@@ -118,8 +122,10 @@
   --color-input: var(--border);
   --color-ring: var(--accent);
 
-  --font-sans: var(--font-manrope);
-  --font-display: var(--font-unbounded);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+  /* «Почерк» учителя — оценки в варианте A. */
+  --font-hand: var(--font-caveat);
 }
 
 @theme {

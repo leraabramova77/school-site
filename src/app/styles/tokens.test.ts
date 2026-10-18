@@ -27,6 +27,7 @@ function tokens(selector: string): Record<string, LinearRgb> {
 
 const grades = ["5", "4", "3", "2", "debt"];
 const surfaces = ["bg", "surface", "surface-2"];
+const subjects = Array.from({ length: 8 }, (_, i) => `subject-${i}`);
 
 /** Пары «текст — фон», которые встречаются в интерфейсе. WCAG AA для обычного текста — 4.5:1. */
 const textPairs: [string, string][] = [
@@ -39,7 +40,9 @@ const textPairs: [string, string][] = [
   ...grades.flatMap((g): [string, string][] => [
     [`grade-${g}`, `grade-${g}-soft`],
     [`grade-${g}`, "surface"],
+    ["grade-fg", `grade-${g}`],
   ]),
+  ...subjects.map((s): [string, string] => [s, "surface"]),
 ];
 
 const themes = [

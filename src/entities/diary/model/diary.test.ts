@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { DiaryItem } from "@/shared/netschool";
-import { daysWithMarks, toDiaryWeekView, workTypeLabel } from "./diary";
+import {
+  daysWithMarks,
+  subjectTone,
+  toDiaryWeekView,
+  workTypeLabel,
+} from "./diary";
 
 // Выдуманные задания.
 const item = (over: Partial<DiaryItem>): DiaryItem => ({
@@ -84,5 +89,15 @@ describe("daysWithMarks", () => {
         ],
       }),
     ).toEqual(["2026-10-13", "2026-10-14"]);
+  });
+});
+
+describe("subjectTone", () => {
+  it("постоянный для предмета и в пределах палитры", () => {
+    expect(subjectTone("Алгебра")).toBe(subjectTone(" алгебра "));
+    for (const s of ["Алгебра", "История", "Физика", "Русский язык"]) {
+      expect(subjectTone(s)).toBeGreaterThanOrEqual(0);
+      expect(subjectTone(s)).toBeLessThan(8);
+    }
   });
 });

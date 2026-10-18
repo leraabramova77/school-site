@@ -1,14 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Manrope, Unbounded } from "next/font/google";
 import { MotionProvider } from "@/app/motion";
 import { QueryProvider } from "@/app/query";
 import { ThemeProvider } from "@/app/theme";
 import { themeColor } from "@/shared/config";
 import "@/app/styles/globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Manrope — основной текст, Unbounded — крупные цифры и заголовки (вариант дизайна B).
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin", "cyrillic"],
+});
+const unbounded = Unbounded({
+  variable: "--font-unbounded",
+  subsets: ["latin", "cyrillic"],
+  weight: ["600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -29,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // next-themes ставит класс темы на <html> до гидрации — отсюда suppressHydrationWarning.
     <html
       lang="ru"
-      className={`${geistSans.variable} h-full antialiased`}
+      className={`${manrope.variable} ${unbounded.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col font-sans">

@@ -15,30 +15,31 @@ type DayStripProps = {
   week: IsoDate;
   selected: IsoDate;
   onSelect: (date: IsoDate) => void;
-  /** Сегодня — подчёркнуто цветом, даже если выбран другой день. */
+  /** Сегодня — число подчёркнуто, даже если выбран другой день. */
   today?: IsoDate;
-  /** Дни с отметкой-точкой (например, есть новые оценки). */
-  marked?: readonly IsoDate[];
+  /** Цветные точки под числом (CSS-цвета, например `var(--grade-5)`) — оценки дня. Показываем до четырёх. */
+  dots?: Partial<Record<IsoDate, readonly string[]>>;
   className?: string;
 };
 
-/** Лента дней недели Пн–Сб. Свайпы между днями и неделями — на экране «Дневник». */
+/** Лента дней недели Пн–Сб: плашки, выбранная — инверсией. Свайпы между днями — на экране «Дневник». */
 export function DayStrip({
   week,
   selected,
   onSelect,
   today,
-  marked = [],
+  dots = {},
   className,
 }: DayStripProps) {
   return (
     <div
       data-slot="day-strip"
-      className={cn("grid grid-cols-6 gap-1", className)}
+      className={cn("grid grid-cols-6 gap-1.5", className)}
     >
       {schoolWeek(week).map((date) => {
         const isSelected = date === selected;
         const isToday = date === today;
+        const dayDots = (dots[date] ?? []).slice(0, 4);
         return (
           <button
             key={date}
@@ -48,45 +49,46 @@ export function DayStrip({
             aria-current={isToday ? "date" : undefined}
             aria-label={`${formatDayLong(date)}${isToday ? ", сегодня" : ""}`}
             className={cn(
-              "relative flex h-16 cursor-pointer flex-col items-center justify-center gap-0.5 rounded-2xl transition-colors",
-              !isSelected && "hover:bg-surface-2",
-              isToday && !isSelected
-                ? "text-accent"
-                : isSelected
-                  ? "text-accent-fg"
-                  : "text-text",
+              "relative flex h-[4.5rem] cursor-pointer flex-col items-center justify-center gap-1 rounded-[1.125rem] bg-surface transition-colors",
+              isSelected ? "text-accent-fg" : "text-text hover:bg-surface-2",
             )}
           >
             {isSelected && (
               <motion.span
                 layoutId={`day-strip-${week}`}
                 aria-hidden
-                className="absolute inset-0 rounded-2xl bg-accent"
-                transition={{ type: "spring", duration: 0.25, bounce: 0.2 }}
+                className="absolute inset-0 rounded-[1.125rem] bg-accent"
+                transition={{ type: "spring", duration: 0.3, bounce: 0.15 }}
               />
             )}
             <span
               className={cn(
-                "relative text-footnote",
-                !isSelected && !isToday && "text-text-muted",
+                "relative text-footnote leading-none",
+                isSelected ? "opacity-70" : "text-text-muted",
               )}
             >
               {formatWeekdayShort(date)}
             </span>
-            <span className="relative font-semibold text-title-3 leading-none">
+            <span
+              className={cn(
+                "relative font-bold font-display text-[1.125rem] leading-none",
+                isToday &&
+                  !isSelected &&
+                  "underline decoration-[3px] underline-offset-[5px]",
+              )}
+            >
               {formatDayOfMonth(date)}
             </span>
-            <span
-              aria-hidden
-              className={cn(
-                "relative size-1 rounded-full",
-                marked.includes(date)
-                  ? isSelected
-                    ? "bg-accent-fg"
-                    : "bg-accent"
-                  : "bg-transparent",
-              )}
-            />
+            <span aria-hidden className="relative flex h-1.5 gap-[3px]">
+              {dayDots.map((color, i) => (
+                <span
+                  // biome-ignore lint/suspicious/noArrayIndexKey: точки дня не переставляются, порядок постоянный
+                  key={i}
+                  className="size-1.5 rounded-full"
+                  style={{ backgroundColor: color }}
+                />
+              ))}
+            </span>
           </button>
         );
       })}

@@ -95,3 +95,15 @@ export function toDiaryWeekView(week: DiaryWeek): DiaryWeekView {
       .map(([date, entries]) => ({ date, entries })),
   };
 }
+
+/** Сколько цветов предметов в палитре (`--subject-0` … `--subject-7`). */
+export const SUBJECT_TONES = 8;
+
+/** Постоянный цвет предмета: одно и то же название — всегда один и тот же номер цвета. */
+export function subjectTone(subject: string): number {
+  let hash = 0;
+  for (const char of subject.trim().toLowerCase()) {
+    hash = (hash * 31 + (char.codePointAt(0) ?? 0)) >>> 0;
+  }
+  return hash % SUBJECT_TONES;
+}

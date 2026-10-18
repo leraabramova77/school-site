@@ -5,7 +5,7 @@ import { useState, useSyncExternalStore } from "react";
 import { cn } from "@/shared/lib/cn";
 import { formatDayLong } from "@/shared/lib/date";
 import { DayStrip, ErrorState } from "@/shared/ui";
-import { demoMarkedDays, demoToday, demoWeek } from "../model/demo-data";
+import { demoDayDots, demoToday, demoWeek } from "../model/demo-data";
 
 export function DayStripDemo() {
   const [selected, setSelected] = useState(demoToday);
@@ -16,7 +16,7 @@ export function DayStripDemo() {
         selected={selected}
         onSelect={setSelected}
         today={demoToday}
-        marked={demoMarkedDays}
+        dots={demoDayDots}
       />
       <p className="text-center text-footnote text-text-muted">
         Выбран: {formatDayLong(selected)}

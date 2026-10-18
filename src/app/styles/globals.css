@@ -120,7 +120,10 @@
   --default-transition-duration: 200ms;
 }
 
-/* Safe-area: чёлка iPhone и нижняя полоска (нужен viewport-fit=cover, он в app/layout.tsx). */
+/*
+ * Safe-area: чёлка iPhone и нижняя полоска (нужен viewport-fit=cover, он в app/layout.tsx).
+ * pt-safe и т.п. заменяют отступ целиком (на десктопе это 0) — рядом с py-8 нужен pt-[max(2rem,env(safe-area-inset-top))].
+ */
 @utility pt-safe {
   padding-top: env(safe-area-inset-top);
 }

@@ -15,3 +15,4 @@
 | 0007 | feature | GradeChip, LessonCard, DayStrip, витрина /design | — | #13 | ✅ |
 | 0008 | feature | TabBar / Sidebar, каркас приложения на /design | — | #14 | ✅ |
 | 0009 | feature | env.ts (Zod, server-only) и безопасный логгер | — | #15 | ✅ |
+| 0010 | feature | Хеш пароля netschool (md5, windows-1251 по таблице сайта) | — | #16 | ✅ |

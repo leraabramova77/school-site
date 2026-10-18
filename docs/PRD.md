@@ -46,7 +46,7 @@
 | 0003 Разведка API netschool.refal.kg через браузер, `docs/api-map.md` на выдуманных данных | Точная карта API (ТЗ-1, этап 0) | Claude + Лера (вход) | ✅ |
 | 0004 `pnpm wt remove` на Windows, обновления GitHub Actions и react | Уборка worktree без хвостов, CI без устаревшего Node 20 | Claude | ✅ |
 | 0005 Дизайн-токены OKLCH, шрифт, светлая/тёмная тема, safe-area | Дизайн-система (ТЗ-1 §5.2) | Claude | ✅ |
-| 0006 shadcn/ui в `shared/ui`: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
+| 0006 shadcn/ui в `shared/ui`: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState | Дизайн-система (ТЗ-1, этап 2) | Claude | ✅ |
 | 0007 GradeChip, LessonCard, DayStrip | Дизайн-система (ТЗ-1, этап 2) | Claude | ⏳ |
 | 0008 TabBar / Sidebar, страница `/design` | Утверждение вида (ТЗ-1 §5.6) | Claude | ⏳ |
 | Подключить репозиторий к Vercel, утвердить `/design` с телефона | Стоп-точка этапа 2 | Лера | ⏳ |
@@ -76,3 +76,4 @@
 | 18.10.2026 | 0003 Разведка API: REST выключен, вход и данные через ASP-формы и HTML, карта в docs/api-map.md | см. git log |
 | 18.10.2026 | 0004 `pnpm wt remove` на Windows без хвостов, обновления Actions, react 19.3.1 | PR #10 |
 | 18.10.2026 | 0005 Дизайн-токены OKLCH, светлая/тёмная тема (next-themes), safe-area, тест контраста WCAG AA | PR #11 |
+| 18.10.2026 | 0006 shadcn/ui-основа в `shared/ui` (кнопки 44 px, поле пароля с «показать», состояния пусто/ошибка), Motion с reducedMotion, lucide | PR #12 |

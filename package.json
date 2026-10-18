@@ -16,7 +16,8 @@
     "wt": "tsx scripts/worktree.ts",
     "hooks:install": "git config core.hooksPath scripts/hooks",
     "lint:env": "tsx scripts/check-public-env.ts",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "netschool:watch": "tsx scripts/netschool-session-watch.ts"
   },
   "dependencies": {
     "class-variance-authority": "0.7.1",

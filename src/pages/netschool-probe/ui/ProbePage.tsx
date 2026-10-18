@@ -1,54 +1,19 @@
 "use client";
 
-import { type FormEvent, useEffect, useState } from "react";
-import type { DiaryWeek } from "@/shared/netschool";
-import { Button, Card, Input, PasswordInput, Skeleton } from "@/shared/ui";
-
-type ProbeResult =
-  | {
-      ok: true;
-      durationMs: number;
-      cookieNames: string[];
-      sessionAgeMin: number;
-      week: DiaryWeek;
-    }
-  | { ok?: false; error: string; code?: string };
-
-type ResumeResult =
-  | ProbeResult
-  | { ok?: false; needLogin: true; expiredAfterIdleMin?: number };
-
-const API = "/api/dev/netschool-probe";
-
-/** Credential Management API есть в Chrome/Edge, но не в типах TypeScript. */
-type PasswordCredentialCtor = new (form: HTMLFormElement) => Credential;
-
-/**
- * Просим браузер сохранить пароль после успешного входа. Chrome/Edge — явно через PasswordCredential; Safari и
- * Firefox предлагают сохранить сами, когда форма входа исчезает со страницы после успешного запроса.
- */
-async function offerToSavePassword(form: HTMLFormElement): Promise<void> {
-  const Ctor = (window as { PasswordCredential?: PasswordCredentialCtor })
-    .PasswordCredential;
-  if (!Ctor) return;
-  try {
-    await navigator.credentials.store(new Ctor(form));
-  } catch {
-    // Пользователь отказался или браузер не дал — ничего страшного.
-  }
-}
+import { useEffect, useState } from "react";
+import { Button, Card, Skeleton } from "@/shared/ui";
+import { logout, type ProbeResult, resume } from "../model/api";
+import { LoginForm } from "./LoginForm";
 
 /** Отладочная страница: вход в netschool и разбор текущей недели. Только в `pnpm dev`. */
 export function ProbePage() {
-  const [pending, setPending] = useState(false);
   const [resuming, setResuming] = useState(true);
   const [expiredNote, setExpiredNote] = useState<string | null>(null);
   const [result, setResult] = useState<ProbeResult | null>(null);
 
   // При открытии — пробуем сохранённую сессию: если она жива, вход не нужен.
   useEffect(() => {
-    fetch(API)
-      .then((res) => res.json() as Promise<ResumeResult>)
+    resume()
       .then((data) => {
         if ("needLogin" in data) {
           if (data.expiredAfterIdleMin !== undefined) {
@@ -60,39 +25,13 @@ export function ProbePage() {
           setResult(data);
         }
       })
-      .catch(() => setResult({ error: "Наш сервер не ответил" }))
       .finally(() => setResuming(false));
   }, []);
 
-  async function logout() {
-    await fetch(API, { method: "DELETE" }).catch(() => undefined);
+  async function onLogout() {
+    await logout();
     setResult(null);
     setExpiredNote(null);
-  }
-
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const data = new FormData(form);
-    setPending(true);
-    setResult(null);
-    try {
-      const res = await fetch(API, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          login: data.get("login"),
-          password: data.get("password"),
-        }),
-      });
-      const next = (await res.json()) as ProbeResult;
-      if (next.ok) await offerToSavePassword(form);
-      setResult(next);
-    } catch {
-      setResult({ error: "Наш сервер не ответил" });
-    } finally {
-      setPending(false);
-    }
   }
 
   return (
@@ -115,39 +54,14 @@ export function ProbePage() {
       {resuming ? (
         <Skeleton className="h-48 rounded-card" />
       ) : result?.ok ? (
-        <Button variant="secondary" onClick={logout}>
+        <Button variant="secondary" onClick={onLogout}>
           Выйти
         </Button>
       ) : (
-        <Card className="p-4">
-          <form
-            method="post"
-            onSubmit={onSubmit}
-            className="flex flex-col gap-3"
-          >
-            <label htmlFor="probe-login" className="text-subhead">
-              Логин
-            </label>
-            <Input
-              id="probe-login"
-              name="login"
-              autoComplete="username"
-              required
-            />
-            <label htmlFor="probe-password" className="text-subhead">
-              Пароль
-            </label>
-            <PasswordInput
-              id="probe-password"
-              name="password"
-              autoComplete="current-password"
-              required
-            />
-            <Button type="submit" disabled={pending}>
-              {pending ? "Вхожу…" : "Войти и загрузить неделю"}
-            </Button>
-          </form>
-        </Card>
+        <LoginForm
+          submitLabel="Войти и загрузить неделю"
+          onResult={setResult}
+        />
       )}
 
       {result && !result.ok && (

@@ -59,7 +59,11 @@ function errorResponse(error: unknown): Response {
 }
 
 /** Загружает неделю и обновляет cookie: netschool мог выдать новые cookie, а время использования сдвигается. */
-async function loadWeek(ns: NetschoolSession, createdAt: number) {
+async function loadWeek(
+  ns: NetschoolSession,
+  createdAt: number,
+  lastUsedAt = createdAt,
+) {
   const started = performance.now();
   const { week, raw } = await fetchDiaryWeek(ns);
   await saveSkeleton("diary", raw.html);
@@ -70,6 +74,8 @@ async function loadWeek(ns: NetschoolSession, createdAt: number) {
     durationMs: Math.round(performance.now() - started),
     cookieNames: Object.keys(ns.cookies),
     sessionAgeMin: Math.round((now - createdAt) / 60_000),
+    /** Сколько минут перед этим запросом сессия простаивала. */
+    idleMin: Math.round((now - lastUsedAt) / 60_000),
     week,
   });
 }
@@ -105,7 +111,7 @@ export async function probeResume(request: Request): Promise<Response> {
   const saved: SessionData | null = await readSession();
   if (!saved) return Response.json({ needLogin: true }, { status: 401 });
   try {
-    return await loadWeek(saved.ns, saved.createdAt);
+    return await loadWeek(saved.ns, saved.createdAt, saved.lastUsedAt);
   } catch (error) {
     if (error instanceof NetschoolError && error.code === "session_expired") {
       await clearSession();

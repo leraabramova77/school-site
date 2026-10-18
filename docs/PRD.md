@@ -48,7 +48,7 @@
 | 0005 Дизайн-токены OKLCH, шрифт, светлая/тёмная тема, safe-area | Дизайн-система (ТЗ-1 §5.2) | Claude | ✅ |
 | 0006 shadcn/ui в `shared/ui`: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState | Дизайн-система (ТЗ-1, этап 2) | Claude | ✅ |
 | 0007 GradeChip, LessonCard, DayStrip + витрина `/design` | Дизайн-система (ТЗ-1, этап 2) | Claude | ✅ |
-| 0008 TabBar / Sidebar на витрине `/design` | Утверждение вида (ТЗ-1 §5.6) | Claude | ⏳ |
+| 0008 TabBar / Sidebar на витрине `/design` | Утверждение вида (ТЗ-1 §5.6) | Claude | ✅ |
 | Подключить репозиторий к Vercel, утвердить `/design` с телефона | Стоп-точка этапа 2 | Лера | ⏳ |
 | 0009 `env.ts` и безопасный логгер | ТЗ-1 §4.3, §4.5 | Claude | ⏳ |
 | 0010 Хеш пароля (`md5(salt + md5(пароль))` в windows-1251, `PW` = обрезка `PW2`) | ТЗ-1 §2 | Claude | ⏳ |
@@ -78,3 +78,4 @@
 | 18.10.2026 | 0005 Дизайн-токены OKLCH, светлая/тёмная тема (next-themes), safe-area, тест контраста WCAG AA | PR #11 |
 | 18.10.2026 | 0006 shadcn/ui-основа в `shared/ui` (кнопки 44 px, поле пароля с «показать», состояния пусто/ошибка), Motion с reducedMotion, lucide | PR #12 |
 | 18.10.2026 | 0007 GradeChip, LessonCard (домашка раскрывается), DayStrip Пн–Сб, даты без сдвига пояса; витрина `/design` на выдуманных данных | PR #13 |
+| 18.10.2026 | 0008 Каркас приложения: таб-бар с блюром на мобилке, боковая панель на десктопе (≥ 1024 px), safe-area; витрина `/design` в каркасе | PR #14 |

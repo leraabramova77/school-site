@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { MotionProvider } from "@/app/motion";
+import { QueryProvider } from "@/app/query";
 import { ThemeProvider } from "@/app/theme";
 import { themeColor } from "@/shared/config";
 import "@/app/styles/globals.css";
@@ -33,7 +34,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col font-sans">
         <ThemeProvider>
-          <MotionProvider>{children}</MotionProvider>
+          <QueryProvider>
+            <MotionProvider>{children}</MotionProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

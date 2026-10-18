@@ -5,7 +5,7 @@ export default defineConfig([
   ...fsd.configs.recommended,
   {
     // Пока сущности и виджеты использует только витрина /design. Вернуть правило, когда появятся экраны «Дневник»,
-    // «Сегодня» и «Оценки» (задачи 0017–0019, см. docs/PRD.md).
+    // «Сегодня» и «Оценки» (задачи 0018–0020, см. docs/PRD.md).
     files: ["./src/entities/**", "./src/widgets/**"],
     rules: { "fsd/insignificant-slice": "off" },
   },

@@ -1,4 +1,4 @@
-import { Palette } from "lucide-react";
+import { FlaskConical, Palette } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/shared/ui";
 
@@ -16,6 +16,15 @@ export function HomePage() {
           Дизайн-система
         </Link>
       </Button>
+      {/* Временно: отладочная страница netschool есть только в `pnpm dev`, в проде ссылки нет. */}
+      {process.env.NODE_ENV === "development" && (
+        <Button asChild variant="outline" className="self-start">
+          <Link href="/dev/netschool">
+            <FlaskConical aria-hidden />
+            Проверка netschool (dev)
+          </Link>
+        </Button>
+      )}
     </main>
   );
 }

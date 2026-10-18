@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Варианты дизайна дневника</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Golos+Text:wght@400;600&family=Onest:wght@600&family=Unbounded:wght@800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  :root { --bg: #f4f5f8; --surface: #fff; --text: #16182a; --muted: #6b7086; --line: #e3e5ee; color-scheme: light; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0e1016; --surface: #181b24; --text: #eef0f7; --muted: #8d93a8; --line: #272b37; color-scheme: dark; }
+  }
+  body { background: var(--bg); color: var(--text); font: 400 16px/1.5 "Golos Text", system-ui, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 16px 48px; }
+  h1 { font-weight: 600; font-size: 28px; line-height: 1.2; letter-spacing: -0.01em; }
+  .lead { color: var(--muted); margin-top: 8px; }
+  ul { list-style: none; display: grid; gap: 12px; margin-top: 24px; }
+  a.card { display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center; padding: 16px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); color: inherit; text-decoration: none; }
+  a.card:hover { border-color: var(--muted); }
+  .mark { width: 72px; height: 72px; border-radius: 18px; display: grid; place-items: center; }
+  .a .mark { background: #fbfcfe; color: #d2363a; font: 700 40px/1 "Caveat", cursive; box-shadow: inset 4px 0 0 #d2363a, inset 0 0 0 1px #dbe2ef; }
+  .b .mark { background: #1f9d5b; color: #fff; font: 800 30px/1 "Unbounded", sans-serif; }
+  .c .mark { background: #e4effb; color: #0b6bcb; font: 600 28px/1 "Golos Text", sans-serif; }
+  .name { font-weight: 600; font-size: 18px; }
+  .desc { color: var(--muted); font-size: 15px; margin-top: 2px; }
+  .note { margin-top: 24px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Как будет выглядеть дневник</h1>
+  <p class="lead">Три варианта одного экрана — «Дневник». Откройте с телефона, полистайте дни свайпом, раскройте «подробнее», переключите тему.</p>
+  <ul>
+    <li><a class="card a" href="a-notebook.html"><span class="mark" aria-hidden="true">5</span><span><span class="name">A · Тетрадь</span><p class="desc">Как бумажный дневник: строки по линейке, поля, оценки красной ручкой.</p></span></a></li>
+    <li><a class="card b" href="b-subjects.html"><span class="mark" aria-hidden="true">5</span><span><span class="name">B · Цвет предмета</span><p class="desc">Крупное число дня, у каждого предмета свой цвет, оценки — цветные плитки.</p></span></a></li>
+    <li><a class="card c" href="c-list.html"><span class="mark" aria-hidden="true">5</span><span><span class="name">C · Спокойный список</span><p class="desc">Как приложения iPhone: день разделён на «задано на дом» и «работу на уроке».</p></span></a></li>
+  </ul>
+  <p class="note">Все данные выдуманные: это прототипы для выбора стиля, а не настоящий дневник.</p>
+</main>
+</body>
+</html>

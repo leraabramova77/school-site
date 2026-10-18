@@ -1,0 +1,97 @@
+/* Общее для всех вариантов: сброс, без прокрутки вбок, анимация смены дня, уважение к «уменьшить движение». */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  overflow-x: clip;
+}
+body {
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+:focus-visible {
+  outline: 2px solid var(--focus, currentColor);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+[data-day-content] {
+  overflow-x: clip;
+}
+.day-enter > * {
+  animation: day-enter 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.day-enter > :nth-child(2) {
+  animation-delay: 30ms;
+}
+.day-enter > :nth-child(3) {
+  animation-delay: 60ms;
+}
+.day-enter > :nth-child(n + 4) {
+  animation-delay: 90ms;
+}
+@keyframes day-enter {
+  from {
+    opacity: 0;
+    transform: translateX(var(--from, 0));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .day-enter > * {
+    animation: none;
+  }
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* Переключатель вариантов внизу страницы — только для прототипов. */
+.variants {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px 16px calc(100px + env(safe-area-inset-bottom));
+  font-size: 13px;
+}
+.variants a {
+  color: inherit;
+  opacity: 0.6;
+  text-decoration: none;
+  padding: 12px 10px;
+}
+.variants a[aria-current] {
+  opacity: 1;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

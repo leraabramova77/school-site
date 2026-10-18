@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вариант B — Цвет предмета</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  :root {
+    --bg: #f2f3f8;
+    --surface: #ffffff;
+    --text: #121424;
+    --muted: #6a6f85;
+    --line: #e4e6ef;
+    --invert: #121424;
+    --invert-fg: #ffffff;
+    --g5: #1f9d5b;
+    --g4: #1f7fc9;
+    --g3: #d98e04;
+    --g2: #e5484d;
+    --gd: #8e4ec6;
+    --focus: #3a7bff;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1016;
+    --surface: #181b24;
+    --text: #eef0f7;
+    --muted: #8d93a8;
+    --line: #262a36;
+    --invert: #eef0f7;
+    --invert-fg: #0e1016;
+    --g5: #2fb170;
+    --g4: #3b95dc;
+    --g3: #e5a224;
+    --g2: #f0605f;
+    --gd: #a46ad9;
+    color-scheme: dark;
+  }
+  body { background: var(--bg); color: var(--text); font: 500 16px/1.45 "Manrope", system-ui, sans-serif; }
+  .app { max-width: 480px; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 16px 0; }
+
+  .icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 14px; color: var(--muted); }
+  .icon:hover:not(:disabled) { background: var(--surface); color: var(--text); }
+  .icon svg { width: 22px; height: 22px; }
+
+  /* Число дня — главный герой экрана. */
+  .hero { display: grid; grid-template-columns: auto 1fr auto; align-items: end; gap: 14px; margin-top: 8px; }
+  .big { font: 800 104px/0.82 "Unbounded", sans-serif; letter-spacing: -0.06em; margin-left: -4px; }
+  .hero-meta { padding-bottom: 4px; min-width: 0; }
+  .hero-meta .wd { font: 700 20px/1.1 "Unbounded", sans-serif; letter-spacing: -0.01em; }
+  .hero-meta .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .hero .icon { align-self: start; }
+
+  .weekbar { display: flex; align-items: center; gap: 2px; margin: 18px -10px 0; }
+  .weekbar p { flex: 1; font-weight: 700; font-size: 14px; color: var(--muted); }
+  .today-btn { height: 36px; padding: 0 14px; border-radius: 999px; font-weight: 700; font-size: 13px; background: var(--surface); }
+
+  .days { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 6px; }
+  .day { height: 74px; border-radius: 18px; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: background 0.2s, color 0.2s; }
+  .day .wd { font-size: 12px; color: var(--muted); }
+  .day .n { font: 700 18px/1.1 "Unbounded", sans-serif; }
+  .day[aria-pressed="true"] { background: var(--invert); color: var(--invert-fg); }
+  .day[aria-pressed="true"] .wd { color: inherit; opacity: 0.7; }
+  .day[aria-current="date"]:not([aria-pressed="true"]) .n { text-decoration: underline 3px; text-underline-offset: 5px; }
+  .dots { display: flex; gap: 3px; height: 6px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); }
+
+  .list { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; padding-bottom: 12px; }
+  .card { background: var(--surface); border-radius: 22px; padding: 16px 16px 16px 20px; box-shadow: inset 6px 0 0 var(--c); display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; }
+  .subj { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 17px; line-height: 1.25; }
+  .meta { grid-column: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .hw { font-weight: 800; font-size: 11px; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 6px; color: var(--c); background: color-mix(in oklab, var(--c) 14%, transparent); }
+  .txt { grid-column: 1; margin-top: 4px; font-size: 15.5px; font-weight: 500; overflow-wrap: anywhere; }
+  .gradebox { grid-column: 2; grid-row: 1 / span 3; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .tile { width: 54px; height: 54px; border-radius: 17px; display: grid; place-items: center; color: #fff; background: var(--gc); font: 700 26px/1 "Unbounded", sans-serif; }
+  .tile.debt { font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .w { font-size: 11px; font-weight: 700; color: var(--muted); }
+  .more { grid-column: 1 / -1; margin: 8px -6px -6px -10px; min-height: 44px; padding: 0 12px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 14px; color: var(--c); background: color-mix(in oklab, var(--c) 9%, transparent); }
+  .more svg { width: 20px; height: 20px; transition: rotate 0.2s; }
+  .more[aria-expanded="true"] svg { rotate: 180deg; }
+  .details { grid-column: 1 / -1; margin-top: 10px; font-size: 15px; overflow-wrap: anywhere; }
+  .details dt { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .details dd { margin: 2px 0 10px; }
+  .details dd:last-child { margin-bottom: 0; }
+
+  .empty { background: var(--surface); border-radius: 22px; padding: 36px 20px; text-align: center; }
+  .empty b { font: 700 20px/1.2 "Unbounded", sans-serif; }
+  .empty p { color: var(--muted); margin-top: 6px; }
+
+  /* Плавающая панель разделов */
+  .tabs { position: fixed; left: 0; right: 0; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 10; padding: 0 16px; }
+  .tabs ul { max-width: 448px; margin: 0 auto; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px; border-radius: 26px; background: color-mix(in oklab, var(--surface) 86%, transparent); backdrop-filter: blur(18px); box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.3), 0 0 0 1px var(--line); }
+  .tabs a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 0; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--muted); text-decoration: none; }
+  .tabs a[aria-current] { background: var(--invert); color: var(--invert-fg); }
+  .tabs svg { width: 22px; height: 22px; }
+  .variants { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="app" id="diary"></div>
+<nav class="tabs" aria-label="Разделы">
+  <ul>
+    <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Сегодня</a></li>
+    <li><a href="#" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/></svg>Дневник</a></li>
+    <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>Оценки</a></li>
+    <li><a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>Ещё</a></li>
+  </ul>
+</nav>
+<nav class="variants" aria-label="Варианты дизайна">
+  <a href="./">Все варианты</a><a href="a-notebook.html">A · Тетрадь</a><a href="b-subjects.html" aria-current="page">B · Цвет предмета</a><a href="c-list.html">C · Спокойный список</a>
+</nav>
+<script src="shared/data.js"></script>
+<script src="shared/diary.js"></script>
+<script>
+  // Цвет предмета постоянный: один и тот же предмет всегда одного цвета.
+  const light = ["#ff6b57", "#f29d12", "#22a565", "#0e9f9f", "#3a7bff", "#7c5cff", "#e8468f", "#8a9a2b"];
+  const dark = ["#ff8a78", "#f5b13d", "#3cc47f", "#2bbcbc", "#6b9bff", "#9c83ff", "#f06aa8", "#a9ba45"];
+  const subjectColor = (name) => {
+    let h = 0;
+    for (const ch of name) h = (h * 31 + ch.codePointAt(0)) >>> 0;
+    const palette = document.documentElement.dataset.theme === "dark" ? dark : light;
+    return palette[h % palette.length];
+  };
+  const gradeVar = (m) => (m === "debt" ? "var(--gd)" : `var(--g${Math.max(2, m)})`);
+  const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+  const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+  const chevD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  const moon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>';
+
+  const root = document.getElementById("diary");
+  mountDiary(root, (s) => {
+    const { F } = s;
+    const days = s.week.map((d) => `
+      <button class="day" data-go="${d}" aria-pressed="${d === s.date}" ${d === s.today ? 'aria-current="date"' : ""} aria-label="${F.wdLong(d)}, ${F.dayMonth(d)}${d === s.today ? ", сегодня" : ""}">
+        <span class="wd">${F.wd(d)}</span><span class="n">${F.num(d)}</span>
+        <span class="dots" aria-hidden="true">${s.marksOf(d).slice(0, 4).map((m) => `<i style="--dot:${gradeVar(m)}"></i>`).join("")}</span>
+      </button>`).join("");
+
+    const cards = s.entries.map((e) => {
+      const isOpen = s.open.has(e.id);
+      const grade = e.mark === "debt"
+        ? `<div class="gradebox"><span class="tile debt" style="--gc:${gradeVar("debt")}" role="img" aria-label="Долг">долг</span></div>`
+        : e.mark !== undefined
+          ? `<div class="gradebox"><span class="tile" style="--gc:${gradeVar(e.mark)}" role="img" aria-label="Оценка ${e.mark}${e.weight ? `, вес ${e.weight}` : ""}">${e.mark}</span>${e.weight ? `<span class="w" aria-hidden="true">вес ${e.weight}</span>` : ""}</div>`
+          : "";
+      const details = e.details ? `
+        <button class="more" data-toggle="${e.id}" aria-expanded="${isOpen}" aria-controls="d-${e.id}">${isOpen ? "Свернуть" : "Подробнее"}${chevD}</button>
+        <dl class="details" id="d-${e.id}" ${isOpen ? "" : "hidden"}>${e.details.map((r) => `<dt>${F.esc(r.label)}</dt><dd>${r.html}</dd>`).join("")}</dl>` : "";
+      return `
+        <article class="card" style="--c:${subjectColor(e.subject)}">
+          <h3 class="subj">${F.esc(e.subject)}</h3>
+          ${grade}
+          <p class="meta">${e.hw ? '<span class="hw">ДЗ</span>' : ""}${F.esc(e.type)}</p>
+          ${e.text ? `<p class="txt">${F.esc(e.text)}</p>` : ""}
+          ${details}
+        </article>`;
+    }).join("");
+
+    const count = s.entries.length;
+    return `
+      <header>
+        <div class="hero">
+          <p class="big" aria-hidden="true">${F.num(s.date)}</p>
+          <div class="hero-meta">
+            <h1 class="wd">${F.wdLong(s.date)}<span class="sr-only">, ${F.dayMonth(s.date)}</span></h1>
+            <p class="sub">${F.month(s.date)} · ${count ? F.plural(count, "задание", "задания", "заданий") : "заданий нет"}</p>
+          </div>
+          <button class="icon" data-theme-toggle aria-label="Сменить тему">${moon}</button>
+        </div>
+        <div class="weekbar">
+          <button class="icon" data-week="-1" aria-label="Предыдущая неделя" ${s.canPrev ? "" : "disabled"}>${chevL}</button>
+          <p>${F.weekRange(s.monday)}</p>
+          ${s.isThisWeek ? "" : '<button class="today-btn" data-today>Сегодня</button>'}
+          <button class="icon" data-week="1" aria-label="Следующая неделя" ${s.canNext ? "" : "disabled"}>${chevR}</button>
+        </div>
+        <div class="days" role="group" aria-label="Дни недели">${days}</div>
+      </header>
+      <main class="list" data-day-content>
+        ${count ? cards : '<div class="empty"><b>Заданий нет</b><p>В этот день в дневнике пусто.</p></div>'}
+      </main>`;
+  });
+  // Цвета предметов зависят от темы — перерисовать после переключения.
+  root.addEventListener("click", (e) => {
+    if (e.target.closest("[data-theme-toggle]")) dispatchEvent(new HashChangeEvent("hashchange"));
+  });
+</script>
+</body>
+</html>

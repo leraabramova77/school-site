@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Вариант A — Тетрадь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  :root {
+    --desk: #e9edf5;
+    --paper: #fbfcfe;
+    --ink: #1f3a93;
+    --ink-soft: #e6ebf8;
+    --red: #d2363a;
+    --rule: #dbe2ef;
+    --text: #18203a;
+    --muted: #68718a;
+    --focus: var(--ink);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --desk: #0a0f1c;
+    --paper: #111a2e;
+    --ink: #9db4ff;
+    --ink-soft: #1c2847;
+    --red: #ff7a70;
+    --rule: #233150;
+    --text: #e7ebf5;
+    --muted: #8e99b5;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--desk);
+    color: var(--text);
+    font: 400 16px/1.45 "Onest", system-ui, sans-serif;
+  }
+  .app {
+    max-width: 460px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    background: var(--paper);
+  }
+  @media (min-width: 520px) {
+    .app { margin: 24px auto; min-height: auto; border-radius: 20px; box-shadow: 0 1px 0 var(--rule), 0 20px 60px -30px rgb(20 30 60 / 0.35); overflow: clip; }
+  }
+
+  /* Шапка */
+  .hd { padding: max(20px, env(safe-area-inset-top)) 16px 4px; }
+  .hd-top { display: flex; align-items: center; justify-content: space-between; }
+  h1 { font-weight: 700; font-size: 30px; letter-spacing: -0.02em; }
+  .icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; color: var(--muted); }
+  .icon:hover:not(:disabled) { background: var(--ink-soft); color: var(--ink); }
+  .icon svg { width: 22px; height: 22px; }
+  .week { display: flex; align-items: center; gap: 4px; margin: 10px -10px 0; }
+  .week-label { flex: 1; font-weight: 600; font-size: 15px; color: var(--muted); padding-left: 2px; }
+  .today-btn { height: 36px; padding: 0 12px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--ink); background: var(--ink-soft); }
+
+  .days { display: grid; grid-template-columns: repeat(6, 1fr); margin: 6px -4px 0; }
+  .day { position: relative; height: 66px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 14px; }
+  .day:hover { background: var(--ink-soft); }
+  .day .wd { font-size: 12px; color: var(--muted); text-transform: lowercase; }
+  .day .n { font-weight: 600; font-size: 21px; line-height: 1.1; }
+  .day[aria-pressed="true"] .n, .day[aria-pressed="true"] .wd { color: var(--ink); }
+  .day .stroke { position: absolute; left: 50%; bottom: 7px; width: 34px; height: 8px; translate: -50% 0; color: var(--ink); }
+  .day .today-dot { position: absolute; top: 9px; right: calc(50% - 20px); width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+
+  /* Лист дня: красная линия полей слева, колонка «оценка» справа — как в бумажном дневнике. */
+  .sheet {
+    position: relative;
+    margin-top: 10px;
+    border-top: 1px solid var(--rule);
+    padding-bottom: 8px;
+    background: linear-gradient(to right, transparent 21px, var(--red) 21px, var(--red) 22.5px, transparent 22.5px);
+    background-repeat: no-repeat;
+  }
+  .sheet-date { display: flex; align-items: baseline; gap: 10px; padding: 16px 16px 10px 36px; }
+  .sheet-date h2 { font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+  .sheet-date h2::first-letter { text-transform: uppercase; }
+  .sheet-date span { color: var(--muted); font-size: 14px; }
+  .cols { display: grid; grid-template-columns: 1fr 72px; padding-left: 36px; border-bottom: 1px solid var(--rule); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .cols span { padding: 4px 0 6px; }
+  .cols span + span { text-align: center; border-left: 1px solid var(--rule); }
+
+  .row { display: grid; grid-template-columns: 1fr 72px; padding-left: 36px; border-bottom: 1px solid var(--rule); }
+  .what { padding: 14px 14px 14px 0; min-width: 0; }
+  .what h3 { font-weight: 600; font-size: 17px; line-height: 1.3; }
+  .kind { font-size: 13px; color: var(--muted); margin-top: 1px; }
+  .kind.hw { color: var(--ink); font-weight: 500; }
+  .txt { margin-top: 6px; font-size: 15.5px; overflow-wrap: anywhere; }
+  .more { margin-top: 8px; min-height: 32px; font-size: 14px; color: var(--ink); text-decoration: underline dashed; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .details { margin-top: 6px; padding: 10px 12px; border-radius: 12px; background: var(--ink-soft); font-size: 14.5px; overflow-wrap: anywhere; }
+  .details dt { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .details dd { margin: 2px 0 10px; }
+  .details dd:last-child { margin-bottom: 0; }
+  .details p + p { margin-top: 6px; }
+
+  .mark { border-left: 1px solid var(--rule); display: flex; flex-direction: column; align-items: center; padding-top: 8px; }
+  .grade { position: relative; width: 52px; height: 52px; display: grid; place-items: center; color: var(--red); }
+  .grade svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .grade b { font: 700 36px/1 "Caveat", cursive; translate: 1px 1px; }
+  .w { font-size: 11px; color: var(--muted); margin-top: -2px; }
+  .debt { margin-top: 12px; font: 700 25px/1 "Caveat", cursive; color: var(--red); text-decoration: underline wavy; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+
+  .empty { padding: 48px 24px 56px 36px; text-align: center; }
+  .empty b { display: block; font: 700 34px/1.1 "Caveat", cursive; color: var(--ink); }
+  .empty p { color: var(--muted); margin-top: 6px; }
+
+  /* Нижняя панель */
+  .tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; }
+  .tabs ul { max-width: 460px; margin: 0 auto; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 8px max(8px, env(safe-area-inset-bottom)); background: color-mix(in oklab, var(--paper) 88%, transparent); backdrop-filter: blur(16px); border-top: 1px solid var(--rule); }
+  .tabs a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; font-size: 11px; color: var(--muted); text-decoration: none; }
+  .tabs a[aria-current] { color: var(--ink); font-weight: 600; }
+  .tabs svg { width: 24px; height: 24px; }
+  @media (min-width: 520px) { .tabs { position: static; } .tabs ul { border-radius: 0 0 20px 20px; } }
+  .variants { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="diary"></div>
+  <nav class="tabs" aria-label="Разделы">
+    <ul>
+      <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Сегодня</a></li>
+      <li><a href="#" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/><path d="M8 3v15"/></svg>Дневник</a></li>
+      <li><a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg>Оценки</a></li>
+      <li><a href="#"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>Ещё</a></li>
+    </ul>
+  </nav>
+</div>
+<nav class="variants" aria-label="Варианты дизайна">
+  <a href="./">Все варианты</a><a href="a-notebook.html" aria-current="page">A · Тетрадь</a><a href="b-subjects.html">B · Цвет предмета</a><a href="c-list.html">C · Спокойный список</a>
+</nav>
+<script src="shared/data.js"></script>
+<script src="shared/diary.js"></script>
+<script>
+  // Кружок «от руки»: начало и конец не сходятся, как у учителя.
+  const circle = '<svg viewBox="0 0 52 52" fill="none" aria-hidden="true"><path d="M33 7.5C20 4 7.5 11 6.5 24.5S17 47 29 45.5 46.5 34 45 21.5 30 4.5 18.5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  const stroke = '<svg class="stroke" viewBox="0 0 34 8" fill="none" aria-hidden="true"><path d="M2 5.5C9 3 20 2.2 32 3.6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
+  const chevL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+  const chevR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+  const moon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>';
+
+  mountDiary(document.getElementById("diary"), (s) => {
+    const { F } = s;
+    const days = s.week.map((d) => `
+      <button class="day" data-go="${d}" aria-pressed="${d === s.date}" ${d === s.today ? 'aria-current="date"' : ""} aria-label="${F.wdLong(d)}, ${F.dayMonth(d)}${d === s.today ? ", сегодня" : ""}">
+        ${d === s.today ? '<span class="today-dot"></span>' : ""}
+        <span class="wd">${F.wd(d)}</span><span class="n">${F.num(d)}</span>
+        ${d === s.date ? stroke : ""}
+      </button>`).join("");
+
+    const rows = s.entries.map((e) => {
+      const isOpen = s.open.has(e.id);
+      const mark = e.mark === "debt"
+        ? '<span class="debt" aria-label="Долг">долг</span>'
+        : e.mark !== undefined
+          ? `<span class="grade" role="img" aria-label="Оценка ${e.mark}${e.weight ? `, вес ${e.weight}` : ""}">${circle}<b>${e.mark}</b></span>${e.weight ? `<span class="w" aria-hidden="true">вес ${e.weight}</span>` : ""}`
+          : "";
+      const details = e.details ? `
+        <button class="more" data-toggle="${e.id}" aria-expanded="${isOpen}" aria-controls="d-${e.id}">${isOpen ? "свернуть" : "подробнее"}</button>
+        <dl class="details" id="d-${e.id}" ${isOpen ? "" : "hidden"}>${e.details.map((r) => `<dt>${F.esc(r.label)}</dt><dd>${r.html}</dd>`).join("")}</dl>` : "";
+      return `
+        <article class="row">
+          <div class="what">
+            <h3>${F.esc(e.subject)}</h3>
+            <p class="kind ${e.hw ? "hw" : ""}">${F.esc(e.type.toLowerCase())}</p>
+            ${e.text ? `<p class="txt">${F.esc(e.text)}</p>` : ""}
+            ${details}
+          </div>
+          <div class="mark">${mark}</div>
+        </article>`;
+    }).join("");
+
+    const count = s.entries.length;
+    return `
+      <header class="hd">
+        <div class="hd-top"><h1>Дневник</h1><button class="icon" data-theme-toggle aria-label="Сменить тему">${moon}</button></div>
+        <div class="week">
+          <button class="icon" data-week="-1" aria-label="Предыдущая неделя" ${s.canPrev ? "" : "disabled"}>${chevL}</button>
+          <p class="week-label">${F.weekRange(s.monday)}</p>
+          ${s.isThisWeek ? "" : '<button class="today-btn" data-today>Сегодня</button>'}
+          <button class="icon" data-week="1" aria-label="Следующая неделя" ${s.canNext ? "" : "disabled"}>${chevR}</button>
+        </div>
+        <div class="days" role="group" aria-label="Дни недели">${days}</div>
+      </header>
+      <main class="sheet">
+        <div data-day-content>
+          <div class="sheet-date"><h2>${F.wdLong(s.date)}</h2><span>${F.dayMonth(s.date)}${count ? ` · ${F.plural(count, "задание", "задания", "заданий")}` : ""}</span></div>
+          ${count ? `<div class="cols" aria-hidden="true"><span>Предмет и задание</span><span>Оценка</span></div>${rows}` : '<div class="empty"><b>Заданий нет</b><p>В этот день в дневнике пусто.</p></div>'}
+        </div>
+      </main>`;
+  });
+</script>
+</body>
+</html>

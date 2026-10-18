@@ -77,6 +77,23 @@
   --color-grade-debt: var(--grade-debt);
   --color-grade-debt-soft: var(--grade-debt-soft);
 
+  /* Имена shadcn/ui → наши токены: компоненты из `shadcn add` сразу попадают в палитру. */
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-fg);
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--text-muted);
+  --color-destructive: var(--grade-2);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+
   --font-sans: var(--font-geist-sans);
 }
 

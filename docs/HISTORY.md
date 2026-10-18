@@ -11,3 +11,4 @@
 | 0003 | chore | Разведка API netschool.refal.kg, docs/api-map.md | — | #9 | ✅ |
 | 0004 | chore | pnpm wt remove на Windows, обновления Actions и react | — | #10 | ✅ |
 | 0005 | feature | Дизайн-токены OKLCH, светлая/тёмная тема, safe-area | — | #11 | ✅ |
+| 0006 | feature | shadcn/ui-основа в shared/ui: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState; Motion, lucide | — | #12 | ✅ |

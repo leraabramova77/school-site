@@ -1,6 +1,7 @@
 name: Варианты дизайна на GitHub Pages
 
-# Публикуется только папка design-variants — статичные прототипы на выдуманных данных.
+# Публикуется только папка design-variants — статичные прототипы на выдуманных данных — и страница-переход app/
+# на запущенное приложение. Его адрес — переменная репозитория APP_URL; после её смены: gh workflow run pages.yml.
 on:
   push:
     branches: [main]
@@ -25,6 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/configure-pages@v6
+      - name: Адрес приложения для страницы-перехода
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: sed -i "s#__APP_URL__#${APP_URL}#" design-variants/app/index.html
       - uses: actions/upload-pages-artifact@v5
         with:
           path: design-variants

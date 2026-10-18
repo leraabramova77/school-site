@@ -28,10 +28,13 @@
   .name { font-weight: 600; font-size: 18px; }
   .desc { color: var(--muted); font-size: 15px; margin-top: 2px; }
   .note { margin-top: 24px; font-size: 14px; color: var(--muted); }
+  a.open { display: block; margin-bottom: 28px; padding: 16px 20px; border-radius: 20px; background: var(--text); color: var(--bg); font-weight: 600; font-size: 18px; text-decoration: none; }
+  a.open small { display: block; font-weight: 400; font-size: 14px; opacity: 0.75; }
 </style>
 </head>
 <body>
 <main>
+  <a class="open" href="app/">Открыть настоящий дневник →<small>вход по логину и паролю школьного дневника</small></a>
   <h1>Как будет выглядеть дневник</h1>
   <p class="lead">Три варианта одного экрана — «Дневник». Откройте с телефона, полистайте дни свайпом, раскройте «подробнее», переключите тему.</p>
   <ul>
@@ -39,7 +42,7 @@
     <li><a class="card b" href="b-subjects.html"><span class="mark" aria-hidden="true">5</span><span><span class="name">B · Цвет предмета</span><p class="desc">Крупное число дня, у каждого предмета свой цвет, оценки — цветные плитки.</p></span></a></li>
     <li><a class="card c" href="c-list.html"><span class="mark" aria-hidden="true">5</span><span><span class="name">C · Спокойный список</span><p class="desc">Как приложения iPhone: день разделён на «задано на дом» и «работу на уроке».</p></span></a></li>
   </ul>
-  <p class="note">Все данные выдуманные: это прототипы для выбора стиля, а не настоящий дневник.</p>
+  <p class="note">В прототипах выше данные выдуманные. В настоящем дневнике те же три варианта переключаются кнопками A / B / C.</p>
 </main>
 </body>
 </html>

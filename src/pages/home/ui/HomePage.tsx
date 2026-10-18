@@ -1,5 +1,6 @@
 import { FlaskConical, LogIn, Palette } from "lucide-react";
 import Link from "next/link";
+import { HOME_PATH } from "@/shared/config";
 import { Button } from "@/shared/ui";
 
 export function HomePage() {
@@ -10,7 +11,7 @@ export function HomePage() {
         Неофициальный мобильный клиент школьного дневника. Сейчас в разработке.
       </p>
       <Button asChild size="lg" className="mt-2 self-start">
-        <Link href="/today">
+        <Link href={HOME_PATH}>
           <LogIn aria-hidden />
           Войти
         </Link>

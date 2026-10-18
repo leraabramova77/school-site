@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дневник — вход</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+  :root { --bg: #f2f3f8; --surface: #fff; --text: #1a1c2b; --muted: #636779; --accent: #1a1c2b; --accent-fg: #fff; color-scheme: light; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0d0e13; --surface: #1b1d24; --text: #eef0f7; --muted: #a0a5b8; --accent: #eef0f7; --accent-fg: #0d0e13; color-scheme: dark; }
+  }
+  body { background: var(--bg); color: var(--text); font: 400 17px/1.5 system-ui, sans-serif; }
+  main { max-width: 480px; margin: 0 auto; padding: max(64px, env(safe-area-inset-top)) 16px 48px; }
+  h1 { font-weight: 700; font-size: 28px; line-height: 1.2; }
+  p { color: var(--muted); margin-top: 10px; }
+  a.btn { display: inline-block; margin-top: 20px; padding: 12px 20px; border-radius: 999px; background: var(--accent); color: var(--accent-fg); font-weight: 600; text-decoration: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Открываем дневник…</h1>
+  <p id="status">Сейчас перейдём на страницу входа.</p>
+  <a class="btn" id="go" href="#" hidden>Открыть</a>
+</main>
+<script>
+  // Адрес приложения подставляет workflow Pages из переменной репозитория APP_URL (сейчас — туннель, потом — Vercel).
+  // ?design=a|b|c передаётся дальше: приложение запомнит вариант оформления.
+  const appUrl = "__APP_URL__";
+  const status = document.getElementById("status");
+  const go = document.getElementById("go");
+  if (/^https:\/\/[^\s"<>]+$/.test(appUrl)) {
+    const target = appUrl.replace(/\/$/, "") + "/login" + location.search;
+    go.href = target;
+    go.hidden = false;
+    location.replace(target);
+  } else {
+    status.textContent = "Приложение сейчас не запущено. Попробуйте чуть позже.";
+  }
+</script>
+</body>
+</html>

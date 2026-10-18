@@ -1,7 +1,11 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
 import { config, proxy } from "../../proxy";
-import { PROTECTED_PATHS, sessionCookieName } from "../../src/shared/config";
+import {
+  HOME_PATH,
+  PROTECTED_PATHS,
+  sessionCookieName,
+} from "../../src/shared/config";
 
 function visit(path: string, withSession: boolean) {
   const headers = new Headers();
@@ -16,8 +20,8 @@ describe("proxy: редиректы входа", () => {
     expect(visit("/diary/2026-10-12", false)).toBe("http://localhost/login");
   });
 
-  it("с сессией /login ведёт на /today, разделы открываются", () => {
-    expect(visit("/login", true)).toBe("http://localhost/today");
+  it("с сессией /login ведёт на главный раздел (HOME_PATH), разделы открываются", () => {
+    expect(visit("/login", true)).toBe(`http://localhost${HOME_PATH}`);
     expect(visit("/grades", true)).toBeNull();
   });
 

@@ -39,19 +39,24 @@ export function GradeChip({
       aria-label={gradeAriaLabel({ mark, weight, workType })}
       title={workType}
       className={cn(
-        "inline-flex shrink-0 items-baseline justify-center gap-0.5 rounded-full font-semibold leading-none",
+        // Снаружи — центр по обеим осям; внутри цифра и вес стоят на общей базовой линии.
+        "inline-flex shrink-0 items-center justify-center rounded-full font-semibold leading-none",
         size === "md"
-          ? "h-8 min-w-8 px-2.5 pt-[0.4375rem] text-body"
-          : "h-6 min-w-6 px-2 pt-[0.3125rem] text-footnote",
+          ? "h-8 min-w-8 px-2.5 text-body"
+          : "h-6 min-w-6 px-2 text-footnote",
         mark === "debt" && (size === "md" ? "text-subhead" : "text-[0.75rem]"),
         toneClass[gradeTone(mark)],
         className,
       )}
     >
-      {label}
-      {showWeight && weight !== undefined && (
-        <span className="font-medium text-[0.625rem] opacity-80">{weight}</span>
-      )}
+      <span className="inline-flex items-baseline gap-0.5 leading-none">
+        {label}
+        {showWeight && weight !== undefined && (
+          <span className="font-medium text-[0.625rem] leading-none opacity-80">
+            {weight}
+          </span>
+        )}
+      </span>
     </span>
   );
 }

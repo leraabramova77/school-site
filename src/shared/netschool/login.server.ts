@@ -65,6 +65,11 @@ export async function loginToNetschool(
       VER: form.ver,
       ECardID: "",
     },
+  }).catch((error: unknown) => {
+    // На неверный логин или пароль старый сайт отвечает страницей ошибки — это не «сессия закончилась».
+    if (error instanceof NetschoolError && error.code === "session_expired")
+      throw new NetschoolError("bad_credentials");
+    throw error;
   });
   const at = parseAt(postlogin.html);
   if (!at) throw new NetschoolError("bad_credentials");

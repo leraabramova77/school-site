@@ -17,7 +17,8 @@
     "hooks:install": "git config core.hooksPath scripts/hooks",
     "lint:env": "tsx scripts/check-public-env.ts",
     "test:e2e": "playwright test",
-    "netschool:watch": "tsx scripts/netschool-session-watch.ts"
+    "netschool:watch": "tsx scripts/netschool-session-watch.ts",
+    "demo": "tsx scripts/demo.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.9.1",

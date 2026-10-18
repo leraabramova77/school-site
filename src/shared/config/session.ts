@@ -18,4 +18,5 @@ export const PROTECTED_PATHS = [
 ] as const;
 
 export const LOGIN_PATH = "/login";
-export const HOME_PATH = "/today";
+// Пока экран «Сегодня» — заглушка, после входа открываем «Дневник». Вернуть "/today" в задаче «Сегодня».
+export const HOME_PATH = "/diary";

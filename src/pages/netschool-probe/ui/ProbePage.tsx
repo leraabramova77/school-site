@@ -8,6 +8,24 @@ type ProbeResult =
   | { ok: true; durationMs: number; cookieNames: string[]; week: DiaryWeek }
   | { ok?: false; error: string; code?: string };
 
+/** Credential Management API есть в Chrome/Edge, но не в типах TypeScript. */
+type PasswordCredentialCtor = new (form: HTMLFormElement) => Credential;
+
+/**
+ * Просим браузер сохранить пароль после успешного входа. Chrome/Edge — явно через PasswordCredential; Safari и
+ * Firefox предлагают сохранить сами, когда форма входа исчезает со страницы после успешного запроса.
+ */
+async function offerToSavePassword(form: HTMLFormElement): Promise<void> {
+  const Ctor = (window as { PasswordCredential?: PasswordCredentialCtor })
+    .PasswordCredential;
+  if (!Ctor) return;
+  try {
+    await navigator.credentials.store(new Ctor(form));
+  } catch {
+    // Пользователь отказался или браузер не дал — ничего страшного.
+  }
+}
+
 /** Отладочная страница: вход в netschool и разбор текущей недели. Только в `pnpm dev`. */
 export function ProbePage() {
   const [pending, setPending] = useState(false);
@@ -15,7 +33,8 @@ export function ProbePage() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
     setPending(true);
     setResult(null);
     try {
@@ -27,7 +46,9 @@ export function ProbePage() {
           password: data.get("password"),
         }),
       });
-      setResult((await res.json()) as ProbeResult);
+      const next = (await res.json()) as ProbeResult;
+      if (next.ok) await offerToSavePassword(form);
+      setResult(next);
     } catch {
       setResult({ error: "Наш сервер не ответил" });
     } finally {
@@ -45,31 +66,41 @@ export function ProbePage() {
         </p>
       </div>
 
-      <Card className="p-4">
-        <form onSubmit={onSubmit} className="flex flex-col gap-3">
-          <label htmlFor="probe-login" className="text-subhead">
-            Логин
-          </label>
-          <Input
-            id="probe-login"
-            name="login"
-            autoComplete="username"
-            required
-          />
-          <label htmlFor="probe-password" className="text-subhead">
-            Пароль
-          </label>
-          <PasswordInput
-            id="probe-password"
-            name="password"
-            autoComplete="current-password"
-            required
-          />
-          <Button type="submit" disabled={pending}>
-            {pending ? "Вхожу…" : "Войти и загрузить неделю"}
-          </Button>
-        </form>
-      </Card>
+      {result?.ok ? (
+        <Button variant="secondary" onClick={() => setResult(null)}>
+          Войти заново
+        </Button>
+      ) : (
+        <Card className="p-4">
+          <form
+            method="post"
+            onSubmit={onSubmit}
+            className="flex flex-col gap-3"
+          >
+            <label htmlFor="probe-login" className="text-subhead">
+              Логин
+            </label>
+            <Input
+              id="probe-login"
+              name="login"
+              autoComplete="username"
+              required
+            />
+            <label htmlFor="probe-password" className="text-subhead">
+              Пароль
+            </label>
+            <PasswordInput
+              id="probe-password"
+              name="password"
+              autoComplete="current-password"
+              required
+            />
+            <Button type="submit" disabled={pending}>
+              {pending ? "Вхожу…" : "Войти и загрузить неделю"}
+            </Button>
+          </form>
+        </Card>
+      )}
 
       {result && !result.ok && (
         <Card className="border-destructive p-4 text-body" role="alert">

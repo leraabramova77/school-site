@@ -19,6 +19,8 @@ const sessionSchema = z.object({
   /** Когда вошли и когда последний раз ходили в netschool (мс) — чтобы понимать срок жизни сессии старого сайта. */
   createdAt: z.number(),
   lastUsedAt: z.number(),
+  /** `PCLID_IUP` ученика (класс) — нужен для других недель и подробностей задания; берётся из дневника. */
+  pclid: z.string().optional(),
 });
 
 export type SessionData = z.infer<typeof sessionSchema>;

@@ -33,3 +33,8 @@ export function gradeAriaLabel(
   if (grade.workType) parts.push(grade.workType.toLowerCase());
   return parts.join(", ");
 }
+
+/** CSS-цвет отметки — для точек в ленте дней и графиков. */
+export function gradeColor(mark: GradeMark): string {
+  return `var(--grade-${gradeTone(mark)})`;
+}

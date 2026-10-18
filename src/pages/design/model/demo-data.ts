@@ -4,11 +4,12 @@ import type { Lesson } from "@/entities/lesson";
 /** Выдуманные данные для витрины — ни одного настоящего ученика или учителя. */
 export const demoWeek = "2026-10-12";
 export const demoToday = "2026-10-14";
-export const demoMarkedDays = [
-  "2026-10-12",
-  "2026-10-14",
-  "2026-10-16",
-] as const;
+/** Оценки по дням — цветные точки в ленте. */
+export const demoDayDots: Record<string, string[]> = {
+  "2026-10-12": ["var(--grade-5)", "var(--grade-4)"],
+  "2026-10-14": ["var(--grade-3)"],
+  "2026-10-16": ["var(--grade-5)", "var(--grade-debt)", "var(--grade-4)"],
+};
 
 export const demoLessons: {
   lesson: Lesson;

@@ -60,3 +60,31 @@ export function weekIsAvailable(
 ): boolean {
   return !weeks || weeks.length === 0 || weeks.includes(monday);
 }
+
+/** «сегодня», «завтра», «вчера» — подпись к большому числу дня; для остальных дней пусто. */
+export function relativeDayLabel(date: IsoDate, today: IsoDate): string | null {
+  if (date === today) return "сегодня";
+  if (date === addDays(today, 1)) return "завтра";
+  if (date === addDays(today, -1)) return "вчера";
+  return null;
+}
+
+/** «октябрь» — месяц выбранного дня в именительном падеже. */
+export function formatMonth(date: IsoDate): string {
+  return new Intl.DateTimeFormat("ru-RU", {
+    month: "long",
+    timeZone: "UTC",
+  }).format(new Date(`${date}T00:00:00Z`));
+}
+
+/** «1 задание», «3 задания», «5 заданий»; ноль — «заданий нет». */
+export function formatTaskCount(count: number): string {
+  if (count === 0) return "заданий нет";
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${count} задание`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+    return `${count} задания`;
+  }
+  return `${count} заданий`;
+}

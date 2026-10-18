@@ -13,4 +13,9 @@ export type {
   DiaryMark,
   DiaryWeekView,
 } from "./model/diary";
-export { daysWithMarks, workTypeLabel } from "./model/diary";
+export {
+  daysWithMarks,
+  SUBJECT_TONES,
+  subjectTone,
+  workTypeLabel,
+} from "./model/diary";

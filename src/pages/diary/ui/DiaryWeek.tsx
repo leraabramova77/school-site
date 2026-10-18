@@ -5,11 +5,13 @@ import { CalendarCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { daysWithMarks, diaryWeekQuery, useDiaryWeek } from "@/entities/diary";
+import { diaryWeekQuery, useDiaryWeek } from "@/entities/diary";
+import { gradeColor } from "@/entities/grade";
 import { ApiError } from "@/shared/api";
 import {
   addDays,
   formatDayLong,
+  formatDayOfMonth,
   type IsoDate,
   startOfWeek,
 } from "@/shared/lib/date";
@@ -17,7 +19,10 @@ import { useSwipe } from "@/shared/lib/swipe";
 import { useToday } from "@/shared/lib/today";
 import { Button, DayStrip, EmptyState, ErrorState } from "@/shared/ui";
 import {
+  formatMonth,
+  formatTaskCount,
   formatWeekRange,
+  relativeDayLabel,
   resolveDiaryDate,
   shiftSchoolDay,
   weekIsAvailable,
@@ -78,10 +83,49 @@ function DiaryWeekContent({ today }: { today: IsoDate }) {
 
   const day = week.data?.days.find((d) => d.date === date);
   const needLogin = week.error instanceof ApiError && week.error.needLogin;
+  const relative = relativeDayLabel(date, today);
+  const dots = Object.fromEntries(
+    (week.data?.days ?? []).map((d) => [
+      d.date,
+      d.entries.flatMap((e) => (e.mark === null ? [] : [gradeColor(e.mark)])),
+    ]),
+  );
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="flex items-center gap-1">
+      {/* Большое число — выбранный день (не обязательно сегодня), поэтому рядом подпись «сегодня/завтра/вчера». */}
+      <header className="grid grid-cols-[auto_1fr] items-end gap-3.5">
+        <p
+          aria-hidden
+          className="-ml-1 font-display font-extrabold text-[6.5rem] leading-[0.82] tracking-[-0.06em]"
+        >
+          {formatDayOfMonth(date)}
+        </p>
+        <div className="min-w-0 pb-1">
+          {relative && (
+            <span className="mb-1.5 inline-block rounded-full bg-accent px-2.5 py-0.5 font-extrabold text-[0.6875rem] text-accent-fg uppercase tracking-wider">
+              {relative}
+            </span>
+          )}
+          <h2
+            id="diary-day-title"
+            className="font-bold font-display text-title-3 leading-tight"
+          >
+            {formatDayLong(date).split(",")[0]}
+            <span className="sr-only">
+              , {formatDayLong(date).split(", ")[1]}
+            </span>
+          </h2>
+          <p className="mt-1 text-subhead text-text-muted">
+            {formatMonth(date)}
+            {day !== undefined || week.isSuccess
+              ? ` · ${formatTaskCount(day?.entries.length ?? 0)}`
+              : ""}
+          </p>
+        </div>
+      </header>
+
+      <div className="-mx-2.5 flex items-center gap-0.5">
         <Button
           variant="ghost"
           size="icon"
@@ -91,11 +135,16 @@ function DiaryWeekContent({ today }: { today: IsoDate }) {
         >
           <ChevronLeft aria-hidden />
         </Button>
-        <h2 className="flex-1 text-center font-semibold text-body">
+        <p className="flex-1 font-bold text-subhead text-text-muted">
           {formatWeekRange(monday)}
-        </h2>
+        </p>
         {startOfWeek(home) !== monday && (
-          <Button variant="secondary" size="sm" onClick={() => go(home)}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 rounded-full border-0 font-bold"
+            onClick={() => go(home)}
+          >
             Сегодня
           </Button>
         )}
@@ -114,25 +163,17 @@ function DiaryWeekContent({ today }: { today: IsoDate }) {
         week={monday}
         selected={date}
         today={today}
-        marked={week.data ? daysWithMarks(week.data) : []}
+        dots={dots}
         onSelect={go}
-        className="-mx-1"
       />
 
       <section
         aria-labelledby="diary-day-title"
         aria-busy={week.isPending}
         // overflow-x-clip: карточка дня въезжает сбоку и не должна расширять страницу.
-        className="flex flex-1 touch-pan-y flex-col gap-3 overflow-x-clip"
+        className="mt-1 flex flex-1 touch-pan-y flex-col gap-2.5 overflow-x-clip"
         {...swipe}
       >
-        <h3
-          id="diary-day-title"
-          className="font-semibold text-subhead text-text-muted first-letter:uppercase"
-        >
-          {formatDayLong(date)}
-        </h3>
-
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={date}
@@ -140,7 +181,7 @@ function DiaryWeekContent({ today }: { today: IsoDate }) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -24 * direction }}
             transition={{ type: "spring", duration: 0.3, bounce: 0 }}
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-2.5"
           >
             {week.isPending || needLogin ? (
               <DiaryEntriesSkeleton />
@@ -155,9 +196,10 @@ function DiaryWeekContent({ today }: { today: IsoDate }) {
               ))
             ) : (
               <EmptyState
+                className="rounded-card bg-surface"
                 icon={<CalendarCheck aria-hidden />}
                 title="Заданий нет"
-                description="На этот день в дневнике ничего не записано."
+                description="В этот день в дневнике пусто."
               />
             )}
           </motion.div>

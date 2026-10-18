@@ -6,7 +6,7 @@ import { DiaryWeekSkeleton } from "./DiaryWeekSkeleton";
 /** «Дневник»: задания и отметки по дням недели. Данные — только в браузере, через `/api/diary`. */
 export function DiaryPage() {
   return (
-    <Screen title="Дневник">
+    <Screen title="Дневник" hideTitle>
       <Suspense fallback={<DiaryWeekSkeleton />}>
         <DiaryWeek />
       </Suspense>

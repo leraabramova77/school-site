@@ -46,6 +46,11 @@ export function LessonCard({
           )}
         </div>
         <div className="min-w-0 flex-1">
+          {current && (
+            <p className="mb-0.5 font-semibold text-accent text-footnote uppercase tracking-wide">
+              Идёт сейчас
+            </p>
+          )}
           <p className="font-semibold text-body">{lesson.subject}</p>
           {lesson.room && (
             <p className="text-footnote text-text-muted">каб. {lesson.room}</p>

@@ -5,3 +5,4 @@ export {
   type SessionData,
   writeSession,
 } from "./session.server";
+export { type ApiResult, respondWithSession } from "./with-session.server";

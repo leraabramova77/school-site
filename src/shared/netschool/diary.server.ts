@@ -8,31 +8,39 @@ const ver = () => String(Date.now());
 export type DiaryResult = { week: DiaryWeek; raw: NetschoolResponse };
 
 /**
- * Дневник недели. Без `monday` — текущая неделя. Для другой недели сайту нужен `PCLID_IUP`: берём его из ответа
- * на текущую неделю (лишний запрос только в этом случае).
+ * Дневник недели. Без `monday` — текущая неделя. Для другой недели сайту нужен `PCLID_IUP`: если он уже известен
+ * (из сессии) — один запрос, иначе сначала берём его из текущей недели.
  */
 export async function fetchDiaryWeek(
   session: NetschoolSession,
   monday?: string,
+  knownPclid?: string,
 ): Promise<DiaryResult> {
-  const base = { LoginType: "0", AT: session.at, VER: ver() };
   const path = "/asp/Curriculum/Assignments.asp";
-  let raw = await netschoolRequest(session.cookies, path, {
-    method: "POST",
-    retry: true,
-    form: base,
-  });
-  let week = parseDiary(raw.html);
-  if (monday && week.selectedWeek !== monday && week.pclid) {
-    raw = await netschoolRequest(session.cookies, path, {
+  const base = () => ({ LoginType: "0", AT: session.at, VER: ver() });
+  const request = (form: Record<string, string>) =>
+    netschoolRequest(session.cookies, path, {
       method: "POST",
       retry: true,
-      form: {
-        ...base,
-        VER: ver(),
-        DATE: toSiteDate(monday),
-        PCLID_IUP: week.pclid,
-      },
+      form,
+    });
+
+  if (monday && knownPclid) {
+    const raw = await request({
+      ...base(),
+      DATE: toSiteDate(monday),
+      PCLID_IUP: knownPclid,
+    });
+    return { week: parseDiary(raw.html), raw };
+  }
+
+  let raw = await request(base());
+  let week = parseDiary(raw.html);
+  if (monday && week.selectedWeek !== monday && week.pclid) {
+    raw = await request({
+      ...base(),
+      DATE: toSiteDate(monday),
+      PCLID_IUP: week.pclid,
     });
     week = parseDiary(raw.html);
   }

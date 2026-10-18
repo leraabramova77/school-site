@@ -1,4 +1,6 @@
 // Клиент старого сайта netschool — только для сервера (сетевые модули с `import "server-only"`).
+export type { AssignmentInfo, AssignmentRef } from "./assignment";
+export { fetchAssignmentInfo } from "./assignment.server";
 export type { DiaryItem, DiaryWeek } from "./diary";
 export { fetchDiaryWeek } from "./diary.server";
 export { NetschoolError, type NetschoolErrorCode } from "./errors";

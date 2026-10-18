@@ -12,3 +12,4 @@
 | 0004 | chore | pnpm wt remove на Windows, обновления Actions и react | — | #10 | ✅ |
 | 0005 | feature | Дизайн-токены OKLCH, светлая/тёмная тема, safe-area | — | #11 | ✅ |
 | 0006 | feature | shadcn/ui-основа в shared/ui: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState; Motion, lucide | — | #12 | ✅ |
+| 0007 | feature | GradeChip, LessonCard, DayStrip, витрина /design | — | #13 | ✅ |

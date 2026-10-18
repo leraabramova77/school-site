@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { DiaryItem } from "@/shared/netschool";
-import { toDiaryWeekView } from "./diary";
+import { daysWithMarks, toDiaryWeekView, workTypeLabel } from "./diary";
 
 // Выдуманные задания.
 const item = (over: Partial<DiaryItem>): DiaryItem => ({
@@ -52,5 +52,37 @@ describe("toDiaryWeekView", () => {
       pclid: "111_0",
     });
     expect(JSON.stringify(view)).not.toContain("111_0");
+  });
+});
+
+describe("workTypeLabel", () => {
+  it("расшифровывает известный код, незнакомый — «Задание»", () => {
+    expect(workTypeLabel("Д")).toBe("Домашнее задание");
+    expect(workTypeLabel("_П")).toBe("Задание");
+  });
+});
+
+describe("daysWithMarks", () => {
+  it("отмечает только дни с отметками или долгами", () => {
+    const entry = {
+      id: "1",
+      subject: "Алгебра",
+      typeCode: "О",
+      isHomework: false,
+      text: "",
+      weight: null,
+      assignment: null,
+    };
+    expect(
+      daysWithMarks({
+        monday: "2026-10-12",
+        weeks: [],
+        days: [
+          { date: "2026-10-12", entries: [{ ...entry, mark: null }] },
+          { date: "2026-10-13", entries: [{ ...entry, mark: "debt" }] },
+          { date: "2026-10-14", entries: [{ ...entry, mark: 5 }] },
+        ],
+      }),
+    ).toEqual(["2026-10-13", "2026-10-14"]);
   });
 });

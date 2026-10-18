@@ -1,3 +1,3 @@
-import { assignmentHandler } from "@/entities/diary";
+import { assignmentHandler } from "@/entities/diary/server";
 
 export const GET = assignmentHandler;

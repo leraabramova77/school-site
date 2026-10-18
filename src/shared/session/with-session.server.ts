@@ -1,4 +1,5 @@
 import "server-only";
+import type { ApiResult } from "@/shared/api";
 import { NetschoolError, type NetschoolErrorCode } from "@/shared/netschool";
 import { logger, NO_STORE } from "@/shared/server";
 import {
@@ -7,11 +8,6 @@ import {
   type SessionData,
   writeSession,
 } from "./session.server";
-
-/** Ответ API с данными: либо данные, либо понятная ошибка; `needLogin` — показать экран входа. */
-export type ApiResult<T> =
-  | { ok: true; data: T }
-  | { ok: false; error: string; needLogin?: true };
 
 const statusByCode: Record<NetschoolErrorCode, number> = {
   bad_credentials: 401,

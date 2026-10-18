@@ -8,6 +8,9 @@ import type { DiaryItem, DiaryWeek } from "@/shared/netschool";
 /** Отметка как у сущности «оценка»: 1–5 или долг (точка на старом сайте). */
 export type DiaryMark = 1 | 2 | 3 | 4 | 5 | "debt";
 
+/** Ссылка на подробности задания (`/api/assignment`). */
+export type AssignmentRef = { aid: string; cid: string; tp: string };
+
 export type DiaryEntry = {
   id: string;
   subject: string;
@@ -19,7 +22,7 @@ export type DiaryEntry = {
   weight: number | null;
   mark: DiaryMark | null;
   /** Ссылка на подробности задания (`/api/assignment`); нет — подробностей нет. */
-  assignment: { aid: string; cid: string; tp: string } | null;
+  assignment: AssignmentRef | null;
 };
 
 export type DiaryDay = { date: IsoDate; entries: DiaryEntry[] };
@@ -37,6 +40,28 @@ export type AssignmentView = {
   /** Значения — уже очищенный HTML. */
   rows: { label: string; html: string }[];
 };
+
+const workTypes: Record<string, string> = {
+  Д: "Домашнее задание",
+  К: "Контрольная работа",
+  С: "Самостоятельная работа",
+  Л: "Лабораторная работа",
+  П: "Проект",
+  Т: "Тест",
+  О: "Ответ на уроке",
+};
+
+/** Тип задания словами. Расшифровка части кодов ещё не сверена с netschool — незнакомый код подписываем «Задание». */
+export function workTypeLabel(typeCode: string): string {
+  return workTypes[typeCode] ?? "Задание";
+}
+
+/** Дни, где есть отметки, — для точек в ленте дней. */
+export function daysWithMarks(week: DiaryWeekView): IsoDate[] {
+  return week.days
+    .filter((day) => day.entries.some((entry) => entry.mark !== null))
+    .map((day) => day.date);
+}
 
 function toMark(item: DiaryItem): DiaryMark | null {
   if (item.mark !== null) return item.mark;

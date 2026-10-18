@@ -1,4 +1,4 @@
-import { FlaskConical, Palette } from "lucide-react";
+import { FlaskConical, LogIn, Palette } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/shared/ui";
 
@@ -9,8 +9,13 @@ export function HomePage() {
       <p className="text-body text-text-muted">
         Неофициальный мобильный клиент школьного дневника. Сейчас в разработке.
       </p>
-      {/* Пока экранов нет — ведём на витрину дизайн-системы. */}
-      <Button asChild variant="secondary" className="mt-2 self-start">
+      <Button asChild size="lg" className="mt-2 self-start">
+        <Link href="/today">
+          <LogIn aria-hidden />
+          Войти
+        </Link>
+      </Button>
+      <Button asChild variant="secondary" className="self-start">
         <Link href="/design">
           <Palette aria-hidden />
           Дизайн-система

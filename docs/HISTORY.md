@@ -14,3 +14,4 @@
 | 0006 | feature | shadcn/ui-основа в shared/ui: Button, Card, Input, PasswordInput, Skeleton, EmptyState, ErrorState; Motion, lucide | — | #12 | ✅ |
 | 0007 | feature | GradeChip, LessonCard, DayStrip, витрина /design | — | #13 | ✅ |
 | 0008 | feature | TabBar / Sidebar, каркас приложения на /design | — | #14 | ✅ |
+| 0009 | feature | env.ts (Zod, server-only) и безопасный логгер | — | #15 | ✅ |

@@ -4,5 +4,6 @@ export { fetchDiaryWeek } from "./diary.server";
 export { NetschoolError, type NetschoolErrorCode } from "./errors";
 export type { NetschoolSession } from "./login.server";
 export { loginToNetschool } from "./login.server";
+export { logoutFromNetschool } from "./logout.server";
 export { hashPassword, type PasswordHash } from "./password.server";
 export { htmlSkeleton } from "./skeleton";

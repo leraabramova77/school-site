@@ -9,4 +9,10 @@ export default defineConfig([
     files: ["./src/entities/**", "./src/widgets/**"],
     rules: { "fsd/insignificant-slice": "off" },
   },
+  {
+    // Steiger не видит корневой `app/` (роутинг Next), а API входа сейчас используют только маршруты оттуда.
+    // Вернуть правило, когда экран входа (задача 0016) возьмёт форму из этого слайса.
+    files: ["./src/features/auth/**"],
+    rules: { "fsd/insignificant-slice": "off" },
+  },
 ]);

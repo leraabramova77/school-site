@@ -22,8 +22,11 @@ const sessionSchema = z.object({
 
 export type SessionData = z.infer<typeof sessionSchema>;
 
-/** Сколько живёт наша cookie. Сессия netschool обычно умирает раньше — тогда просим войти заново. */
-export const SESSION_TTL_SECONDS = 7 * 24 * 60 * 60;
+/**
+ * Сколько живёт наша cookie: не дольше токена netschool (`ESRNSec` — сутки, ТЗ-1 §4.2). Сессия netschool без
+ * запросов умирает раньше — тогда просим войти заново.
+ */
+export const SESSION_TTL_SECONDS = 24 * 60 * 60;
 
 /**
  * `__Host-` требует Secure, а браузер не сохранит Secure-cookie, пришедшую по http с адреса в локальной сети.

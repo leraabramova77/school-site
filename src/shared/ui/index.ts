@@ -7,6 +7,7 @@ export {
   CardHeader,
   CardTitle,
 } from "./Card";
+export { DayStrip } from "./DayStrip";
 export { EmptyState } from "./EmptyState";
 export { ErrorState } from "./ErrorState";
 export { Input } from "./Input";

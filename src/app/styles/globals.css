@@ -146,6 +146,23 @@
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+
+  /* Плавное раскрытие <details> (домашка в LessonCard). Где ::details-content нет — просто открывается. */
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  details::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition:
+      block-size 200ms var(--ease-spring),
+      content-visibility 200ms allow-discrete;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+  }
 }
 
 /* Вне @layer — поэтому перебивает утилиты Tailwind без !important. Анимации Motion глушит MotionConfig. */

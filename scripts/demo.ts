@@ -61,7 +61,18 @@ function readState(): State | null {
   }
 }
 
+/** Жив ли процесс. После перезагрузки state.json остаётся, а процессов уже нет. */
+function alive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function kill(pid: number) {
+  if (!alive(pid)) return;
   try {
     if (isWin)
       execFileSync("taskkill", ["/PID", String(pid), "/T", "/F"], {
@@ -208,9 +219,15 @@ async function start() {
 function status() {
   const state = readState();
   if (!state) return log("не запущено");
-  log(`сервер: http://localhost:${state.port} (pid ${state.serverPid})`);
-  log(`туннель: ${state.url} (pid ${state.tunnelPid})`);
-  log("ссылка: https://leraabramova77.github.io/school-site/app/");
+  const server = alive(state.serverPid);
+  const tunnel = alive(state.tunnelPid);
+  const mark = (on: boolean) => (on ? "работает" : "НЕ РАБОТАЕТ");
+  log(`сервер: http://localhost:${state.port} — ${mark(server)}`);
+  log(`туннель: ${state.url} — ${mark(tunnel)}`);
+  if (server && tunnel)
+    return log("ссылка: https://leraabramova77.github.io/school-site/app/");
+  log("демо остановлено (например, после перезагрузки) — запусти pnpm demo");
+  process.exitCode = 1;
 }
 
 const command = process.argv[2] ?? "start";
